@@ -5,9 +5,11 @@ import Buttons from "../buttons/Buttons";
 import EditCommentPopup from "../editCommentPopup/EditCommentPopup";
 import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
-function Comment(comment, { setComments }) {
+function Comment(
+  comment,
+  { setComments, handleEditCommPopupOpen, isComPopupOpen, onClose }
+) {
   const [getComm, setGetComm] = useState({});
-  const [isComPopupOpen, setIsComPopupOpen] = useState(false);
   const { getComment, deleteComment, editComment } = useContext(MainContext);
   const { user } = useContext(AuthContext);
   const currentCommentid = comment.commentId;
@@ -42,14 +44,6 @@ function Comment(comment, { setComments }) {
       .catch((error) => console.log("error", error));
   };
 
-  const handleEditCommPopupOpen = () => {
-    setIsComPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsComPopupOpen(false);
-  };
-
   return (
     <li className="comment" key={comment.commentId}>
       <div className="comment-box">
@@ -76,7 +70,7 @@ function Comment(comment, { setComments }) {
           />
         ) : null}
         <EditCommentPopup
-          onClose={closePopup}
+          onClose={onClose}
           isOpen={isComPopupOpen}
           id={comment.adId}
           getComm={getComm}
