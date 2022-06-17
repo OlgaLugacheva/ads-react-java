@@ -40,7 +40,7 @@ function App() {
     auth
       .registration({ email, password, first_name, last_name, phone })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         if (res) {
           handleAuthorization({ email, password });
         } else {
@@ -81,6 +81,17 @@ function App() {
         setTimeout(() => setIsLoading(false), 700);
       });
   };
+
+  function heandlerChangePassword({ uid, token, new_password }) {
+    auth
+      .changePassword({
+        uid,
+        token,
+        new_password,
+      })
+      .then(() => navigate.push("/sign-in"))
+      .catch((error) => console.log("error", error));
+  }
 
   //Open/close navigation when page's size max-width 840px
   const handleOpenPopup = () => {
@@ -161,7 +172,7 @@ function App() {
           <Route
             exact
             path="/password/reset/confirm/:Ng/:id/"
-            element={<ChangePassword />}
+            element={<ChangePassword heandlerChangePassword={heandlerChangePassword}/>}
           />
           <Route
             exact

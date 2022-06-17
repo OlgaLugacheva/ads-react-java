@@ -1,15 +1,12 @@
-import React, { useState, useContext } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import useFormValidation from "../../utils/hooks/useFormValidation";
 import LinkForm from "../linkForm/LinkForm";
 
-function ChangePassword() {
+function ChangePassword({ heandlerChangePassword }) {
   const [input, setInput] = useState("");
   const { values, handleChange, errors, isValid } = useFormValidation();
-  const { changePassword } = useContext(AuthContext);
   const match = useParams();
-  const history = useHistory();
   const uid = match.Ng;
   const token = match.id;
 
@@ -21,13 +18,11 @@ function ChangePassword() {
   }
 
   function heandlerSubmit() {
-    changePassword({
+    heandlerChangePassword({
       uid: uid,
       token: token,
       new_password: values.new_password,
-    })
-      .then(() => history.push("/sign-in"))
-      .catch((error) => console.log("error", error));
+    });
   }
 
   return (

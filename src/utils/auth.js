@@ -40,6 +40,28 @@ class Auth {
       body: JSON.stringify({ username, password }),
     }).then(this._handleResponse);
   }
+
+  //send link to the email
+  sendLink(email) {
+    return fetch(`${this._url}/users/reset_password/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(email),
+    });
+  }
+
+  //change password
+  changePassword(data) {
+    return fetch(`${this._url}/users/reset_password_confirm/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  }
 }
 
 const auth = new Auth({
