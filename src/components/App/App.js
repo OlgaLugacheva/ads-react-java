@@ -1,51 +1,114 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import auth from "../../utils/auth";
 import Header from "../header/Header";
 import Main from "../main/Main";
 import Footer from "../footer/Footer";
 import Registration from "../registration/Registration";
 import Login from "../login/Login";
-// import UserProfile from "../userProfile/UserProfile";
-// import SinglePage from "../singlePage/SinglePage";
+import UserProfile from "../userProfile/UserProfile";
+import SinglePage from "../singlePage/SinglePage";
 import PopupNavigation from "../popopNavigation/PopupNavigation";
 import NewAdd from "../newAdd/NewAdd";
 import EmailLink from "../emailLink/EmailLink";
 import ChangePassword from "../changePassword/ChangePassword";
 
 function App() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  //const [error, setError] = useState("");
+  //popups
   const [isPopupNavigatorOpen, setIsPopupNavigatorOpen] = useState(false);
-  // const [isUserPhotoPopupOpen, setIsUserPhotoPopupOpen] = useState(false);
-  // const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
-  // const [isEditPhotoPopupOpen, setIsEditPhotoPopupOpen] = useState(false);
-  // const [isComPopupOpen, setIsComPopupOpen] = useState(false);
+  const [isUserPhotoPopupOpen, setIsUserPhotoPopupOpen] = useState(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [isEditPhotoPopupOpen, setIsEditPhotoPopupOpen] = useState(false);
+  const [isComPopupOpen, setIsComPopupOpen] = useState(false);
+
+  let navigate = useNavigate();
+
+  console.log(isAuthorized);
+
+  const handleRegistration = ({
+    email,
+    password,
+    first_name,
+    last_name,
+    phone,
+  }) => {
+    setIsLoading(true);
+    auth
+      .registration({ email, password, first_name, last_name, phone })
+      .then((res) => {
+        console.log(res)
+        if (res) {
+          handleAuthorization({ email, password });
+        } else {
+          Promise.reject(`Ошибка ${res.status}`);
+        }
+      })
+      .catch((error) => {
+        setIsAuthorized(false);
+        if (error === 500 || "Failed to fetch")
+          return console.log("На сервере произошла ошибка");
+        if (error === 409)
+          return console.log("Пользователь с таким email уже существует.");
+        if (error === 400) return console.log("Все поля должны быть заполнены");
+        console.log(error);
+      })
+      .finally(() => {
+        setTimeout(() => setIsLoading(false), 700);
+      });
+  };
+
+  const handleAuthorization = (data) => {
+    auth
+      .authentication(data)
+      .then((res) => {
+        console.log(res);
+        setIsAuthorized(true);
+        navigate.push("/");
+      })
+      .catch((error) => {
+        setIsAuthorized(false);
+        if (error === 500 || "Failed to fetch") return console.log(error);
+        if (error === 400) return console.log("Все поля должны быть заполнены");
+        if (error === 401)
+          return console.log("Вы ввели неправильный логин или пароль.");
+        console.log(error);
+      })
+      .finally(() => {
+        setTimeout(() => setIsLoading(false), 700);
+      });
+  };
 
   //Open/close navigation when page's size max-width 840px
   const handleOpenPopup = () => {
     setIsPopupNavigatorOpen(true);
   };
 
-  // const handleOpenUserPhotoPopup = () => {
-  //   setIsUserPhotoPopupOpen(true);
-  // };
+  const handleOpenUserPhotoPopup = () => {
+    setIsUserPhotoPopupOpen(true);
+  };
 
-  // const handleOpenEditPopup = () => {
-  //   setIsEditPopupOpen(true);
-  // };
+  const handleOpenEditPopup = () => {
+    setIsEditPopupOpen(true);
+  };
 
-  // const handleOpenEditPhotoPopup = () => {
-  //   setIsEditPhotoPopupOpen(true);
-  // };
+  const handleOpenEditPhotoPopup = () => {
+    setIsEditPhotoPopupOpen(true);
+  };
 
-  // const handleEditCommPopupOpen = () => {
-  //   setIsComPopupOpen(true);
-  // };
+  const handleEditCommPopupOpen = () => {
+    setIsComPopupOpen(true);
+  };
 
   const closePopup = () => {
     setIsPopupNavigatorOpen(false);
-    // setIsUserPhotoPopupOpen(false);
-    // setIsEditPopupOpen(false);
-    // setIsEditPhotoPopupOpen(false);
-    // setIsComPopupOpen(false);
+    setIsUserPhotoPopupOpen(false);
+    setIsEditPopupOpen(false);
+    setIsEditPhotoPopupOpen(false);
+    setIsComPopupOpen(false);
   };
 
   useEffect(() => {
@@ -75,19 +138,32 @@ function App() {
     };
   }, []);
   return (
-    <div className="App">
-      <Header onOpen={handleOpenPopup} />
+    <div className="app">
+      <Header onOpen={handleOpenPopup} isAuthorized={isAuthorized} />
       <>
         <Routes>
-          <Route exact path="/sign-in" element={<Login />} />
-          <Route exact path="/sign-up" element={<Registration />} />
+          <Route
+            exact
+            path="/sign-in"
+            element={
+              <Login
+                handleAuthorization={handleAuthorization}
+                isLoading={isLoading}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/sign-up"
+            element={<Registration handleRegistration={handleRegistration} />}
+          />
           <Route exact path="/sign-in/email/" element={<EmailLink />} />
           <Route
             exact
             path="/password/reset/confirm/:Ng/:id/"
             element={<ChangePassword />}
           />
-          {/* <Route
+          <Route
             exact
             path="/profile"
             element={
@@ -97,8 +173,8 @@ function App() {
                 onClose={closePopup}
               />
             }
-          /> */}
-          {/* <Route
+          />
+          <Route
             exact
             path="/ads/:id"
             element={
@@ -127,7 +203,7 @@ function App() {
                 onClose={closePopup}
               />
             }
-          /> */}
+          />
           <Route exact path="/NewAdd" element={<NewAdd />} />
           <Route exact path="/" element={<Main />} />
         </Routes>

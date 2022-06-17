@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Form from "../form/Form";
-import AuthContext from "../../context/AuthContext";
 import useFormValidation from "../../utils/hooks/useFormValidation";
 
-function Registration() {
+function Registration({ handleRegistration }) {
   const [input, setInput] = useState("");
   const { values, handleChange, errors, isValid } = useFormValidation();
-  let { register } = useContext(AuthContext);
 
   function handleChangeInput(e) {
     handleChange(e);
@@ -15,10 +13,23 @@ function Registration() {
     }
   }
 
+  function handleSubmit(e) {
+    e.preventDefault(); //Запрещаем браузеру переходить по адресу формы
+
+    handleRegistration({
+      //Передаём значения управляемых компонентов во внешний обработчик
+      email: values.email,
+      password: values.password,
+      first_name: values.first_name,
+      last_name: values.last_name,
+      phone: values.phone,
+    });
+  }
+
   return (
     <Form
       header="Добро пожаловать!"
-      onSubmit={register}
+      onSubmit={handleSubmit}
       path="/sign-in"
       btn="Зарегистрироваться"
       text="Уже зарегистрированы?&nbsp;"
@@ -41,9 +52,7 @@ function Registration() {
             onChange={handleChangeInput}
           />
           <div
-            className={`input-hidden ${
-              errors.first_name ? "input-error" : ""
-            }`}
+            className={`input-hidden ${errors.first_name ? "input-error" : ""}`}
           >
             {errors.first_name}
           </div>
@@ -62,9 +71,7 @@ function Registration() {
             onChange={handleChangeInput}
           />
           <div
-            className={`input-hidden ${
-              errors.last_name ? "input-error" : ""
-            }`}
+            className={`input-hidden ${errors.last_name ? "input-error" : ""}`}
           >
             {errors.last_name}
           </div>
@@ -80,11 +87,7 @@ function Registration() {
             className="form__email form__input"
             onChange={handleChangeInput}
           />
-          <div
-            className={`input-hidden ${
-              errors.email ? "input-error" : ""
-            }`}
-          >
+          <div className={`input-hidden ${errors.email ? "input-error" : ""}`}>
             {errors.email}
           </div>
         </label>
@@ -101,9 +104,7 @@ function Registration() {
             onChange={handleChangeInput}
           />
           <div
-            className={`input-hidden ${
-              errors.password ? "input-error" : ""
-            }`}
+            className={`input-hidden ${errors.password ? "input-error" : ""}`}
           >
             {errors.password}
           </div>
@@ -121,11 +122,7 @@ function Registration() {
             className="form__input"
             onChange={handleChangeInput}
           />
-          <div
-            className={`input-hidden ${
-              errors.phone ? "input-error" : ""
-            }`}
-          >
+          <div className={`input-hidden ${errors.phone ? "input-error" : ""}`}>
             {errors.phone}
           </div>
         </label>
