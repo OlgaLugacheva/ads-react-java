@@ -1,14 +1,10 @@
-import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import useFormValidation from "../../utils/hooks/useFormValidation";
-import AuthContext from "../../context/AuthContext";
 import LinkForm from "../linkForm/LinkForm";
 
-function EmailLink() {
+function EmailLink({ handlerSendLink }) {
   const [email, setEmail] = useState("");
   const { values, handleChange, errors, isValid } = useFormValidation();
-  const history = useHistory();
-  const { sendLink } = useContext(AuthContext);
 
   const handleChangeEmail = (e) => {
     handleChange(e);
@@ -19,9 +15,7 @@ function EmailLink() {
 
   function heandlerSubmit(e) {
     e.preventDefault();
-    sendLink({ email: values.email })
-      .then(() => history.push("/sign-in"))
-      .catch((error) => console.log("error", error));
+    handlerSendLink({ email: values.email });
   }
   return (
     <LinkForm

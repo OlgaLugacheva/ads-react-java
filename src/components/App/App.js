@@ -93,6 +93,12 @@ function App() {
       .catch((error) => console.log("error", error));
   }
 
+  function handlerSendLink({email}) {
+    auth.sendLink({ email })
+    .then(() => navigate.push("/sign-in"))
+    .catch((error) => console.log("error", error));
+  }
+
   //Open/close navigation when page's size max-width 840px
   const handleOpenPopup = () => {
     setIsPopupNavigatorOpen(true);
@@ -168,7 +174,7 @@ function App() {
             path="/sign-up"
             element={<Registration handleRegistration={handleRegistration} />}
           />
-          <Route exact path="/sign-in/email/" element={<EmailLink />} />
+          <Route exact path="/sign-in/email/" element={<EmailLink handlerSendLink={handlerSendLink}/>} />
           <Route
             exact
             path="/password/reset/confirm/:Ng/:id/"
