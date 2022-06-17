@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import auth from "../../utils/auth";
+import api from "../../utils/api";
 import Header from "../header/Header";
 import Main from "../main/Main";
 import Footer from "../footer/Footer";
@@ -13,9 +14,16 @@ import NewAdd from "../newAdd/NewAdd";
 import EmailLink from "../emailLink/EmailLink";
 import ChangePassword from "../changePassword/ChangePassword";
 
-function App() {
+function App(props) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+  const [userAds, setUserAds] = useState([]);
+  const [pageQty, setPageQty] = useState(0);
+  const [page, setPage] = useState(
+    parseInt(props.location.search?.split("=")[1] || 1)
+  );
 
   //const [error, setError] = useState("");
   //popups
@@ -28,6 +36,20 @@ function App() {
   let navigate = useNavigate();
 
   console.log(isAuthorized);
+  useEffect(() => {
+    if (isAuthorized) {
+      setIsLoading(true);
+      Promise.all([api.getUsersAds(page), api.getUserInfo()])
+        .then(([usersAds, userInormation]) => {
+          setUserAds(usersAds.data.results);
+          setPageQty(Math.round(usersAds.data.count / 4));
+          setUserInfo(userInormation.data);
+        })
+        .catch((error) => console.log("error", error))
+        .finally(() => setTimeout(() => setIsLoading(false), 700));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthorized, page]);
 
   const handleRegistration = ({
     email,
@@ -93,10 +115,11 @@ function App() {
       .catch((error) => console.log("error", error));
   }
 
-  function handlerSendLink({email}) {
-    auth.sendLink({ email })
-    .then(() => navigate.push("/sign-in"))
-    .catch((error) => console.log("error", error));
+  function handlerSendLink({ email }) {
+    auth
+      .sendLink({ email })
+      .then(() => navigate.push("/sign-in"))
+      .catch((error) => console.log("error", error));
   }
 
   //Open/close navigation when page's size max-width 840px
@@ -174,11 +197,17 @@ function App() {
             path="/sign-up"
             element={<Registration handleRegistration={handleRegistration} />}
           />
-          <Route exact path="/sign-in/email/" element={<EmailLink handlerSendLink={handlerSendLink}/>} />
+          <Route
+            exact
+            path="/sign-in/email/"
+            element={<EmailLink handlerSendLink={handlerSendLink} />}
+          />
           <Route
             exact
             path="/password/reset/confirm/:Ng/:id/"
-            element={<ChangePassword heandlerChangePassword={heandlerChangePassword}/>}
+            element={
+              <ChangePassword heandlerChangePassword={heandlerChangePassword} />
+            }
           />
           <Route
             exact
@@ -188,6 +217,12 @@ function App() {
                 isOpen={isUserPhotoPopupOpen}
                 onOpen={handleOpenUserPhotoPopup}
                 onClose={closePopup}
+                userInfo={userInfo}
+                userAds={userAds}
+                pageQty={pageQty}
+                page={page}
+                setPage={setPage}
+                isLoading={isLoading}
               />
             }
           />

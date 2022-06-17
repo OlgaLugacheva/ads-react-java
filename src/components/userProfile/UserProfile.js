@@ -2,46 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Profile from "../profile/Profile";
 import Ads from "../ads/Ads";
-//import Preloader from "../preloader/Preloader";
-//import PaginationComponent from "../paginationComponent/PaginationComponent";
+import Preloader from "../preloader/Preloader";
+import PaginationComponent from "../paginationComponent/PaginationComponent";
 import EditUserImgPopup from "../editUserImgPopup/EditUserImgPopup";
 import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
 function UserProfile(props) {
-  // const {
-  //   isLoading,
-  //   setIsLoading,
-  //   getUsersAds,
-  //   getUserInfo,
-  //   updateUser,
-  //   updateUserPhoto,
-  //   isUserPhotoPopupOpen,
-  //   handleOpenUserPhotoPopup,
-  //   closePopup,
-  // } = useContext(MainContext);
-  // const [pageQty, setPageQty] = useState(0);
-  // const [page, setPage] = useState(
-  //   parseInt(props.location.search?.split("=")[1] || 1)
-  // );
-  // const [userInfo, setUserInfo] = useState({});
-  // const [userAds, setUserAds] = useState([]);
-  // const { user } = useContext(AuthContext);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     setIsLoading(true);
-  //     Promise.all([getUsersAds(page), getUserInfo()])
-  //       .then(([usersAds, userInormation]) => {
-  //         setUserAds(usersAds.data.results);
-  //         setPageQty(Math.round(usersAds.data.count / 4));
-  //         setUserInfo(userInormation.data);
-  //       })
-  //       .catch((error) => console.log("error", error))
-  //       .finally(() => setTimeout(() => setIsLoading(false), 700));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user, page]);
-
   // const handleUpdateUser = (data) => {
   //   updateUser(data)
   //     .then((res) => {
@@ -79,22 +45,20 @@ function UserProfile(props) {
             className="profile-avatar"
             // style={{
             //   backgroundImage: `url(${
-            //     userInfo.image ? userInfo.image : defaultImg
+            //     props.userInfo.image ? props.userInfo.image : defaultImg
             //   })`,
             // }}
             style={{
-              backgroundImage: `url(${
-                defaultImg
-              })`,
+              backgroundImage: `url(${defaultImg})`,
             }}
           >
-            <button
-              className="profile-avatar__button"
-              onClick={props.onOpen}
-            />
+            <button className="profile-avatar__button" onClick={props.onOpen} />
           </div>
         </div>
-        <Profile />
+        <Profile
+          userInfo={props.userInfo}
+          //handleUpdateUser={handleUpdateUser}
+        />
       </section>
       <div className="userProfile-container">
         <h2 className="userProfile-title padding">Мои товары</h2>
@@ -102,11 +66,15 @@ function UserProfile(props) {
           <button className="link-btn" />
         </Link>
       </div>
-      {/* <section className="pagination-container padding">
-        <PaginationComponent pageQty={pageQty} setPage={setPage} page={page} />
-      </section> */}
-      {/* {isLoading ? <Preloader /> : <Ads ads={userAds} />} */}
-      <Ads  />
+      <section className="pagination-container padding">
+        <PaginationComponent
+          pageQty={props.pageQty}
+          setPage={props.setPage}
+          page={props.page}
+        />
+      </section>
+      {props.isLoading ? <Preloader /> : <Ads ads={props.userAds} />}
+      <Ads />
       <EditUserImgPopup
         isOpen={props.isOpen}
         onClose={props.onClose}
@@ -117,4 +85,3 @@ function UserProfile(props) {
 }
 
 export default UserProfile;
-
