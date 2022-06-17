@@ -8,35 +8,6 @@ import EditUserImgPopup from "../editUserImgPopup/EditUserImgPopup";
 import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
 function UserProfile(props) {
-  // const handleUpdateUser = (data) => {
-  //   updateUser(data)
-  //     .then((res) => {
-  //       setUserInfo({
-  //         ...userInfo,
-  //         first_name: res.data.first_name,
-  //         last_name: res.data.last_name,
-  //         phone: res.data.phone,
-  //       });
-  //       localStorage.setItem("userPers", JSON.stringify(userInfo));
-  //     })
-  //     .catch((error) => {
-  //       console.log("error", error);
-  //     });
-  // };
-
-  // const handleUpdateUserPhoto = (image) => {
-  //   updateUserPhoto(image)
-  //     .then((res) => {
-  //       setUserInfo({
-  //         ...userInfo,
-  //         image: res.data.image,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log("error", error);
-  //     });
-  // };
-
   return (
     <main className="main">
       <section className="userProfile-grid padding">
@@ -57,7 +28,7 @@ function UserProfile(props) {
         </div>
         <Profile
           userInfo={props.userInfo}
-          //handleUpdateUser={handleUpdateUser}
+          handleUpdateUser={props.handleUpdateUser}
         />
       </section>
       <div className="userProfile-container">
@@ -78,7 +49,7 @@ function UserProfile(props) {
       <EditUserImgPopup
         isOpen={props.isOpen}
         onClose={props.onClose}
-        //editUserPhoto={handleUpdateUserPhoto}
+        editUserPhoto={props.handleUpdateUserPhoto}
       />
     </main>
   );

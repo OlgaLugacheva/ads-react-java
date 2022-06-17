@@ -83,6 +83,37 @@ function App(props) {
       });
   };
 
+  const handleUpdateUser = (data) => {
+    api
+      .updateUser(data)
+      .then((res) => {
+        setUserInfo({
+          ...userInfo,
+          first_name: res.data.first_name,
+          last_name: res.data.last_name,
+          phone: res.data.phone,
+        });
+        localStorage.setItem("userPers", JSON.stringify(userInfo));
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+  const handleUpdateUserPhoto = (image) => {
+    api
+      .updateUserPhoto(image)
+      .then((res) => {
+        setUserInfo({
+          ...userInfo,
+          image: res.data.image,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
   const handleAuthorization = (data) => {
     auth
       .authentication(data)
@@ -223,6 +254,8 @@ function App(props) {
                 page={page}
                 setPage={setPage}
                 isLoading={isLoading}
+                handleUpdateUser={handleUpdateUser}
+                handleUpdateUserPhoto={handleUpdateUserPhoto}
               />
             }
           />
