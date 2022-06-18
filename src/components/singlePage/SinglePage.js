@@ -5,7 +5,7 @@ import EditAdPopup from "../editAdPopup/EditAdPopup";
 import Buttons from "../buttons/Buttons";
 import api from "../../utils/api";
 import Preloader from "../preloader/Preloader";
-import EditPhotoAdPopup from "../editPhotoPopup/EditPhotoPopup";
+import EditPhotoAdPopup from "../editPhotoAdPopup/EditPhotoAdPopup";
 
 function SinglePage(props) {
   const { id } = useParams();
@@ -42,14 +42,17 @@ function SinglePage(props) {
       .catch((error) => console.log("error", error));
   }
 
-  // function handleEditPhotoAdd(image) {
-  //   editAddPhoto(id, image)
-  //     .then((image) => {
-  //       setAds((ads) => ads.filter((i) => (i.id === ad.pk ? image : null)));
-  //       window.location.reload();
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // }
+  function handleEditPhotoAdd(image) {
+    api
+      .editAddPhoto(id, image)
+      .then((image) => {
+        props.setAds((ads) =>
+          ads.filter((i) => (i.id === ad.pk ? image : null))
+        );
+        window.location.reload();
+      })
+      .catch((error) => console.log("error", error));
+  }
 
   // function handleDeleteAdd(e) {
   //   e.preventDefault();

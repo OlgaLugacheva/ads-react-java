@@ -132,6 +132,18 @@ class Api {
       body: JSON.stringify(data),
     }).then(this._handleResponse);
   }
+
+  editAddPhoto(id, image) {
+    const formData = new FormData();
+    formData.append("image", image);
+    return fetch(`${this._url}/ads/${id}/`, formData, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: this._auth,
+      },
+    }).then(this._handleResponse);
+  }
 }
 
 const api = new Api({
