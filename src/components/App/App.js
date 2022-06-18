@@ -13,15 +13,14 @@ import PopupNavigation from "../popopNavigation/PopupNavigation";
 import NewAdd from "../newAdd/NewAdd";
 import EmailLink from "../emailLink/EmailLink";
 import ChangePassword from "../changePassword/ChangePassword";
+import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
 function App(props) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   //user
   const [userInfo, setUserInfo] = useState({});
-  //commets|comment
-  // const [comments, setComments] = useState([]);
-  // //ads|ad
+  //ads
   const [ad, setAd] = useState({});
   const [ads, setAds] = useState([]);
   const [adsDefault, setAdsDefault] = useState([]);
@@ -32,8 +31,6 @@ function App(props) {
   const [userPage, setUserPage] = useState(
     parseInt(props.location.search?.split("=")[1] || 1)
   );
-
-  //const [error, setError] = useState("");
   //popups
   const [isPopupNavigatorOpen, setIsPopupNavigatorOpen] = useState(false);
   const [isUserPhotoPopupOpen, setIsUserPhotoPopupOpen] = useState(false);
@@ -60,19 +57,6 @@ function App(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthorized, userPage]);
 
-  // useEffect(() => {
-  //   if (isAuthorized) {
-  //     setIsLoading(true);
-  //     Promise.all([api.getComments(ad_pk), api.getAd(id)])
-  //       .then(([commentsData, adData]) => {
-  //         setComments(commentsData.data.results);
-  //         setAd(adData.data);
-  //       })
-  //       .catch((error) => console.log("error", error))
-  //       .finally(() => setTimeout(() => setIsLoading(false), 700));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isAuthorized]);
   //ads
   useEffect(() => {
     setIsLoading(true);
@@ -192,7 +176,6 @@ function App(props) {
       });
   };
 
-  //comment|comments
   const handleAuthorization = (data) => {
     auth
       .authentication(data)
@@ -272,8 +255,8 @@ function App(props) {
     const handleCloseByOverlay = (evt) => {
       //обработчик для закртия popup по кнопке и overlay
       if (
-        evt.target.classList.contains("PopupNavigation_is-opened") ||
-        evt.target.classList.contains("PopupNavigation")
+        evt.target.classList.contains("popupNavigation_is-opened") ||
+        evt.target.classList.contains("popupNavigation")
       ) {
         closePopup();
       }
@@ -323,55 +306,75 @@ function App(props) {
             exact
             path="/profile"
             element={
-              <UserProfile
-                isOpen={isUserPhotoPopupOpen}
-                onOpen={handleOpenUserPhotoPopup}
-                onClose={closePopup}
-                userInfo={userInfo}
-                userAds={userAds}
-                pageQty={userPageQty}
-                page={userPage}
-                setPage={setUserPage}
-                isLoading={isLoading}
-                handleUpdateUser={handleUpdateUser}
-                handleUpdateUserPhoto={handleUpdateUserPhoto}
-              />
+              <ProtectedRoute user={isAuthorized}>
+                <UserProfile
+                  isOpen={isUserPhotoPopupOpen}
+                  onOpen={handleOpenUserPhotoPopup}
+                  onClose={closePopup}
+                  userInfo={userInfo}
+                  userAds={userAds}
+                  pageQty={userPageQty}
+                  page={userPage}
+                  setPage={setUserPage}
+                  isLoading={isLoading}
+                  handleUpdateUser={handleUpdateUser}
+                  handleUpdateUserPhoto={handleUpdateUserPhoto}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             exact
             path="/ads/:id"
             element={
-              <SinglePage
-                isEditPopupOpen={isEditPopupOpen}
-                isEditPhotoPopupOpen={isEditPhotoPopupOpen}
-                isComPopupOpen={isComPopupOpen}
-                handleEditCommPopupOpen={handleEditCommPopupOpen}
-                handleOpenEditPopup={handleOpenEditPopup}
-                handleOpenEditPhotoPopup={handleOpenEditPhotoPopup}
-                onClose={closePopup}
-              />
+              <ProtectedRoute user={isAuthorized}>
+                <SinglePage
+                  isEditPopupOpen={isEditPopupOpen}
+                  isEditPhotoPopupOpen={isEditPhotoPopupOpen}
+                  isComPopupOpen={isComPopupOpen}
+                  handleEditCommPopupOpen={handleEditCommPopupOpen}
+                  handleOpenEditPopup={handleOpenEditPopup}
+                  handleOpenEditPhotoPopup={handleOpenEditPhotoPopup}
+                  onClose={closePopup}
+                  isAuthorized={isAuthorized}
+                  setIsLoading={setIsLoading}
+                  isLoading={isLoading}
+                  user={userInfo.id}
+                  setAds={setAds}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             exact
             path="/profile/ads/:id/"
             element={
-              <SinglePage
-                isEditPopupOpen={isEditPopupOpen}
-                isEditPhotoPopupOpen={isEditPhotoPopupOpen}
-                isComPopupOpen={isComPopupOpen}
-                handleEditCommPopupOpen={handleEditCommPopupOpen}
-                handleOpenEditPopup={handleOpenEditPopup}
-                handleOpenEditPhotoPopup={handleOpenEditPhotoPopup}
-                onClose={closePopup}
-              />
+              <ProtectedRoute user={isAuthorized}>
+                <SinglePage
+                  isEditPopupOpen={isEditPopupOpen}
+                  isEditPhotoPopupOpen={isEditPhotoPopupOpen}
+                  isComPopupOpen={isComPopupOpen}
+                  handleEditCommPopupOpen={handleEditCommPopupOpen}
+                  handleOpenEditPopup={handleOpenEditPopup}
+                  handleOpenEditPhotoPopup={handleOpenEditPhotoPopup}
+                  onClose={closePopup}
+                  isAuthorized={isAuthorized}
+                  setIsLoading={setIsLoading}
+                  isLoading={isLoading}
+                  user={userInfo.id}
+                  setAds={setAds}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             exact
             path="/NewAdd"
-            element={<NewAdd handleAddAd={handleAddAd} isLoading={isLoading} />}
+            element={
+              <ProtectedRoute user={isAuthorized}>
+                <NewAdd handleAddAd={handleAddAd} isLoading={isLoading} />
+              </ProtectedRoute>
+            }
           />
           <Route
             exact

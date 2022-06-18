@@ -7,3 +7,5 @@ const ProtectedRoute = ({ user, redirectPath = "/landing", children }) => {
 
   return children;
 };
+
+export default ProtectedRoute;
