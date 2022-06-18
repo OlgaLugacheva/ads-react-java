@@ -155,6 +155,17 @@ class Api {
       },
     });
   }
+
+  addComment(id, text) {
+    return fetch(`${this._url}/ads/${id}/comments/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this._auth,
+      },
+      body: JSON.stringify(text),
+    }).then(this._handleResponse);
+  }
 }
 
 const api = new Api({

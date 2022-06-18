@@ -64,14 +64,15 @@ function SinglePage(props) {
       .catch((error) => console.log("error", error));
   }
 
-  // function handleAddComment(data) {
-  //   addComment(id, data)
-  //     .then((newComment) => {
-  //       setComments([newComment, ...comments]);
-  //       window.location.reload();
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // }
+  function handleAddComment(data) {
+    api
+      .addComment(id, data)
+      .then((newComment) => {
+        setComments([newComment, ...comments]);
+        window.location.reload();
+      })
+      .catch((error) => console.log("error", error));
+  }
 
   return (
     <main className="cardInformation">
