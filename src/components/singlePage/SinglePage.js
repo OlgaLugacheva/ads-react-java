@@ -54,15 +54,15 @@ function SinglePage(props) {
       .catch((error) => console.log("error", error));
   }
 
-  // function handleDeleteAdd(e) {
-  //   e.preventDefault();
-  //   deleteAdd(id)
-  //     .then(() => {
-  //       setAds((ads) => ads.filter((i) => i.id !== ad.id));
-  //       history.push("/");
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // }
+  function handleDeleteAdd(e) {
+    api
+      .deleteAdd(id)
+      .then(() => {
+        props.setAds((ads) => ads.filter((i) => i.id !== ad.id));
+        history.push("/");
+      })
+      .catch((error) => console.log("error", error));
+  }
 
   // function handleAddComment(data) {
   //   addComment(id, data)

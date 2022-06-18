@@ -144,6 +144,17 @@ class Api {
       },
     }).then(this._handleResponse);
   }
+
+  //delite add
+  deleteAdd(id) {
+    return fetch(`${this._url}/ads/${id}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this._auth,
+      },
+    });
+  }
 }
 
 const api = new Api({
