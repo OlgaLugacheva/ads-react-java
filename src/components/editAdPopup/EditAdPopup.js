@@ -28,9 +28,7 @@ function EditAdPopup({ isEditPopupOpen, onClose, handleEditAdd, id, ad }) {
   }, [ad, setValues]);
 
   return (
-    <div
-      className={`popup ${isEditPopupOpen ? "popup_is-opened" : ""}`}
-    >
+    <div className={`popup ${isEditPopupOpen ? "popup_is-opened" : ""}`}>
       <div className="popup__container">
         <button
           onClick={onClose}
@@ -56,53 +54,49 @@ function EditAdPopup({ isEditPopupOpen, onClose, handleEditAdd, id, ad }) {
               onChange={handleChangeInput}
             />
             <div
-              className={`input-hidden ${
-                errors.title ? "input-error" : ""
-              }`}
+              className={`input-hidden ${errors.title ? "input-error" : ""}`}
             >
               {errors.title}
             </div>
           </label>
-            <label className="comment-label">
-              <h2 className="userForm__subtitle">Цена</h2>
-              <input
-                className="userForm__input"
-                type="number"
-                value={values.price || ""}
-                name="price"
-                required
-                minLength="1"
-                maxLength="30"
-                onChange={handleChangeInput}
-              />
-              <div
-                className={`input-hidden ${
-                  errors.price ? "input-error" : ""
-                }`}
-              >
-                {errors.price}
-              </div>
-            </label>
-            <label className="comment-label">
-              <h2 className="userForm__subtitle">Описание</h2>
-              <input
-                className="userForm__input"
-                name="description"
-                value={values.description || ""}
-                type="text"
-                minLength="8"
-                maxLength="50"
-                required
-                onChange={handleChangeInput}
-              />
-              <div
-                className={`input-hidden ${
-                  errors.description ? "input-error" : ""
-                }`}
-              >
-                {errors.description}
-              </div>
-            </label>
+          <label className="comment-label">
+            <h2 className="userForm__subtitle">Цена</h2>
+            <input
+              className="userForm__input"
+              type="number"
+              value={values.price || ""}
+              name="price"
+              required
+              minLength="1"
+              maxLength="30"
+              onChange={handleChangeInput}
+            />
+            <div
+              className={`input-hidden ${errors.price ? "input-error" : ""}`}
+            >
+              {errors.price}
+            </div>
+          </label>
+          <label className="comment-label">
+            <h2 className="userForm__subtitle">Описание</h2>
+            <input
+              className="userForm__input"
+              name="description"
+              value={values.description || ""}
+              type="text"
+              minLength="8"
+              maxLength="50"
+              required
+              onChange={handleChangeInput}
+            />
+            <div
+              className={`input-hidden ${
+                errors.description ? "input-error" : ""
+              }`}
+            >
+              {errors.description}
+            </div>
+          </label>
         </UserForm>
       </div>
     </div>

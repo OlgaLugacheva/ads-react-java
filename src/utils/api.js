@@ -121,17 +121,17 @@ class Api {
     }).then(this._handleResponse);
   }
 
-  // //edit ad
-  // editAdd(id, data) {
-  //   return fetch(`${this._url}/ads/${id}/`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: this._auth,
-  //     },
-  //     body: JSON.stringify(data),
-  //   }).then(this._handleResponse);
-  // }
+  //edit ad
+  editAdd(id, data) {
+    return fetch(`${this._url}/ads/${id}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this._auth,
+      },
+      body: JSON.stringify(data),
+    }).then(this._handleResponse);
+  }
 }
 
 const api = new Api({

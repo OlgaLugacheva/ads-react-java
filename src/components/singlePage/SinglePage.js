@@ -29,15 +29,18 @@ function SinglePage(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isAuthorized]);
 
-  // function handleEditAdd(data) {
-  //   debugger;
-  //   editAdd(id, data)
-  //     .then((data) => {
-  //       setAds((ads) => ads.filter((i) => (i.id === ad.pk ? data : null)));
-  //       window.location.reload();
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // }
+  function handleEditAdd(data) {
+    debugger;
+    api
+      .editAdd(id, data)
+      .then((data) => {
+        props.setAds((ads) =>
+          ads.filter((i) => (i.id === ad.pk ? data : null))
+        );
+        window.location.reload();
+      })
+      .catch((error) => console.log("error", error));
+  }
 
   // function handleEditPhotoAdd(image) {
   //   editAddPhoto(id, image)
