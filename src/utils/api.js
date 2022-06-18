@@ -104,6 +104,22 @@ class Api {
       headers: this._headers,
     }).then(this._handleResponse);
   }
+
+  addAd({ image, title, price, description }) {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", `${title}`);
+    formData.append("price", `${price}`);
+    formData.append("description", `${description}`);
+
+    fetch(`${this._url}/ads/`, formData, {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: this.auth,
+      },
+    }).then(this._handleResponse);
+  }
 }
 
 const api = new Api({

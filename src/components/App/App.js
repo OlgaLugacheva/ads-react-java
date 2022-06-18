@@ -73,7 +73,7 @@ function App(props) {
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isAuthorized]);
-
+  //ads
   useEffect(() => {
     setIsLoading(true);
     isAuthorized && ad
@@ -117,6 +117,17 @@ function App(props) {
   useEffect(() => {
     setPage(props.location.search?.split("=")[1] || 1);
   }, [ad.length, props.location.search]);
+
+  function handleAddAd(data) {
+    setIsLoading(true);
+    api
+      .addAd(data)
+      .then((newAd) => {
+        setAds([newAd, ...ads]);
+      })
+      .catch((error) => console.log("error", error))
+      .finally(() => setTimeout(() => setIsLoading(false), 500));
+  }
 
   const handleRegistration = ({
     email,
@@ -357,7 +368,11 @@ function App(props) {
               />
             }
           />
-          <Route exact path="/NewAdd" element={<NewAdd />} />
+          <Route
+            exact
+            path="/NewAdd"
+            element={<NewAdd handleAddAd={handleAddAd} isLoading={isLoading} />}
+          />
           <Route
             exact
             path="/"
