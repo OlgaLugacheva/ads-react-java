@@ -58,6 +58,52 @@ class Api {
       },
     }).then(this._handleResponse);
   }
+
+  //comment|comments
+  getComments(ad_pk) {
+    return fetch(`${this._url}/ads/${ad_pk}/comments/`, {
+      method: "GET",
+      credentials: "include",
+      headers: this._headers,
+    }).then(this._handleResponse);
+  }
+
+  getComment(adId, commentId) {
+    return fetch(`${this._url}/ads/${adId}/comments/${commentId}/`, {
+      method: "GET",
+      credentials: "include",
+      headers: this._headers,
+    }).then(this._handleResponse);
+  }
+
+  //ads
+  getAds(page) {
+    return fetch(this._url + `page=${page}`, {
+      method: "GET",
+      headers: this._headers,
+    }).then(this._handleResponse);
+  }
+
+  getAdsTitle(ad, page) {
+    return fetch(this._url + `title=${ad}&page=${page}`, {
+      method: "GET",
+      headers: this._headers,
+    }).then(this._handleResponse);
+  }
+
+  getHiddenAds(page) {
+    return fetch(this._url + `page=${page}`, {
+      method: "GET",
+      headers: this._headers,
+    }).then(this._handleResponse);
+  }
+
+  getHiddenAdsTile(page, ad) {
+    return fetch(this._url + `page=${page}&title=${ad}`, {
+      method: "GET",
+      headers: this._headers,
+    }).then(this._handleResponse);
+  }
 }
 
 const api = new Api({
