@@ -3,12 +3,12 @@ class Api {
   constructor(options) {
     this._url = options.url;
     this._headers = options.headers;
-    this.state = {
+    this._state = {
       username: "",
       password: "",
     };
-    const { username, password } = this.state;
-    this.auth = "Basic " + base64.encode(username + password);
+    const { username, password } = this._state;
+    this._auth = "Basic " + base64.encode(username + password);
   }
 
   _handleResponse(res) {
@@ -40,7 +40,7 @@ class Api {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: this.auth,
+        Authorization: this._auth,
       },
       body: JSON.stringify(data),
     }).then(this._handleResponse);
@@ -54,7 +54,7 @@ class Api {
       credentials: "include",
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: this.auth,
+        Authorization: this._auth,
       },
     }).then(this._handleResponse);
   }
@@ -116,10 +116,22 @@ class Api {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: this.auth,
+        Authorization: this._auth,
       },
     }).then(this._handleResponse);
   }
+
+  // //edit ad
+  // editAdd(id, data) {
+  //   return fetch(`${this._url}/ads/${id}/`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: this._auth,
+  //     },
+  //     body: JSON.stringify(data),
+  //   }).then(this._handleResponse);
+  // }
 }
 
 const api = new Api({
