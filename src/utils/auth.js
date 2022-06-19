@@ -1,14 +1,7 @@
-import base64 from "react-native-base64";
 class Auth {
   constructor(options) {
-    this.state = {
-      username: "",
-      password: "",
-    };
-    const { username, password } = this.state;
     this._url = options.url;
     this._headers = options.headers;
-    this.auth = "Basic " + base64.encode(username + password);
   }
 
   _handleResponse(res) {
@@ -16,7 +9,7 @@ class Auth {
       return res.json();
     }
 
-    return Promise.reject("We have found an error."`Error: ${res.status}`);
+    return Promise.reject(`Error: ${res.status}`);
   }
 
   registration(data) {
@@ -28,23 +21,19 @@ class Auth {
     }).then(this._handleResponse);
   }
 
-  authentication(username, password) {
+  authentication(data) {
     return fetch(`${this._url}/login`, {
       method: "POST",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: this.auth,
-      },
-      body: JSON.stringify({ username, password }),
-    }).then(this._handleResponse);
+      headers: this._headers,
+      body: JSON.stringify(data),
+    });
   }
 
   //send link to the email
   sendLink(email) {
     return fetch(`${this._url}/users/reset_password/`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -56,6 +45,7 @@ class Auth {
   changePassword(data) {
     return fetch(`${this._url}/users/reset_password_confirm/`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
