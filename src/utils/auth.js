@@ -13,12 +13,13 @@ class Auth {
   }
 
   registration(data) {
-    return fetch(`${this._url}/users/`, {
+    return fetch(`${this._url}/register`, {
       method: "POST",
-      credentials: "include",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
-    }).then(this._handleResponse);
+    })
   }
 
   authentication(data) {

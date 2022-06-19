@@ -18,11 +18,9 @@ function Registration({ handleRegistration }) {
 
     handleRegistration({
       //Передаём значения управляемых компонентов во внешний обработчик
-      email: values.email,
+      username: values.username,
       password: values.password,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      phone: values.phone,
+      role: values.role,
     });
   }
 
@@ -39,12 +37,12 @@ function Registration({ handleRegistration }) {
     >
       <>
         <label className="form__label">
-          <h2 className="form__description">Имя</h2>
+          <h2 className="form__description">Имя пользователя</h2>
           <input
             required
-            value={values.first_name || ""}
-            title="Имя"
-            name="first_name"
+            value={values.username || ""}
+            title="username"
+            name="username"
             type="text"
             minLength="3"
             className="form__input"
@@ -52,12 +50,12 @@ function Registration({ handleRegistration }) {
             onChange={handleChangeInput}
           />
           <div
-            className={`input-hidden ${errors.first_name ? "input-error" : ""}`}
+            className={`input-hidden ${errors.username ? "input-error" : ""}`}
           >
-            {errors.first_name}
+            {errors.username}
           </div>
         </label>
-        <label className="form__label">
+        {/* <label className="form__label">
           <h2 className="form__description">Фамилия</h2>
           <input
             required
@@ -75,8 +73,8 @@ function Registration({ handleRegistration }) {
           >
             {errors.last_name}
           </div>
-        </label>
-        <label className="form__label">
+        </label> */}
+        {/* <label className="form__label">
           <h2 className="form__description">E-mail</h2>
           <input
             required
@@ -90,7 +88,7 @@ function Registration({ handleRegistration }) {
           <div className={`input-hidden ${errors.email ? "input-error" : ""}`}>
             {errors.email}
           </div>
-        </label>
+        </label> */}
         <label className="form__label">
           <h2 className="form__description">Пароль</h2>
           <input
@@ -110,19 +108,22 @@ function Registration({ handleRegistration }) {
           </div>
         </label>
         <label className="form__label">
-          <h2 className="form__description">Телефон</h2>
+          <h2 className="form__description">Роль</h2>
           <input
             required
-            value={values.phone || ""}
-            title="Телефон"
-            type="tel"
-            name="phone"
-            pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
-            placeholder="+7(___)___-__-__"
+            value={values.role || ""}
+            // title="Телефон"
+            title="Роль"
+            name="role"
+            type="text"
+            // type="tel"
+            // name="phone"
+            // pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
+            // placeholder="+7(___)___-__-__"
             className="form__input"
             onChange={handleChangeInput}
           />
-          <div className={`input-hidden ${errors.phone ? "input-error" : ""}`}>
+          <div className={`input-hidden ${errors.role ? "input-error" : ""}`}>
             {errors.phone}
           </div>
         </label>
