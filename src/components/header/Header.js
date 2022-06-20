@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
+import React  from "react";
 import MediaQuery from "react-responsive";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
 import Button from "../button/Button";
 import asd from "../../images/tear-off-ads.png";
 import sandwich from "../../images/sandwich__icon.png";
 
-function Header({ onOpen, logOut }) {
+function Header({ onOpen, logOut, isAuthorized}) {
   let location = useLocation().pathname;
-  let { user } = useContext(AuthContext);
   return (
     <header className="header">
       {location === "/sign-up" ? (
@@ -26,7 +24,7 @@ function Header({ onOpen, logOut }) {
         </Link>
       ) : location === "/sign-in/email/newpassword" ? (
         <img className="header__img" src={asd} alt="asd icon" />
-      ) : user ? (
+      ) : isAuthorized ? (
         <>
           <img className="header__img" src={asd} alt="asd icon" />
           <MediaQuery minWidth={1000}>
@@ -34,7 +32,7 @@ function Header({ onOpen, logOut }) {
               logOut={logOut}
               text="Выйти"
               className="button-link button-link__text"
-              user={user}
+              user={isAuthorized}
             />
           </MediaQuery>
           <MediaQuery maxWidth={999}>
@@ -48,12 +46,12 @@ function Header({ onOpen, logOut }) {
         </>
       ) : (
         <>
-          <Link className="link" to="/" user={user}>
+          <Link className="link" to="/" login={isAuthorized}>
             <img className="header__img" src={asd} alt="asd icon" />
           </Link>
           <Link className="link" to="/sign-in">
             <Button
-              user={user}
+              login={isAuthorized}
               text="Войти"
               className="button-link button-link__text"
             />
