@@ -58,8 +58,8 @@ function AddAd({ id, handleAddAd, isLoading }) {
 
   function addNewAd(e) {
     e.preventDefault();
-    handleAddAd({ image, title, price, description});
-    setTimeout(() => window.location.reload(), 500)
+    handleAddAd({ image, title, price, description });
+    setTimeout(() => window.location.reload(), 500);
   }
 
   return (
@@ -155,7 +155,7 @@ function AddAd({ id, handleAddAd, isLoading }) {
         </div>
       </UserForm>
       {isLoading ? <Preloader /> : ""}
-      </>
+    </>
   );
 }
 
