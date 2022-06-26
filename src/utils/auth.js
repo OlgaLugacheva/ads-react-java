@@ -34,7 +34,6 @@ class Auth {
   sendLink(email) {
     return fetch(`${this._url}/users/reset_password/`, {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -46,7 +45,6 @@ class Auth {
   changePassword(data) {
     return fetch(`${this._url}/users/reset_password_confirm/`, {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
