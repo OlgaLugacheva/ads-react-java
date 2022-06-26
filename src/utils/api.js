@@ -1,18 +1,12 @@
-import base64 from "react-native-base64";
 class Api {
   constructor(options) {
     this._url = options.url;
     this._headers = options.headers;
-    this._state = {
-      username: "",
-      password: "",
-    };
-    const { username, password } = this._state;
-    this._auth = "Basic " + base64.encode(username + password);
   }
 
   _handleResponse(res) {
     if (res.ok) {
+      console.log(JSON.parse("res"));
       return res.json();
     }
     return Promise.reject(`Error: ${res.status}`);
@@ -21,7 +15,6 @@ class Api {
   getUserInfo() {
     return fetch(`${this._url}/users/me/`, {
       method: "GET",
-      credentials: "include",
       headers: this._headers,
     }).then(this._handleResponse);
   }
@@ -29,7 +22,6 @@ class Api {
   getUsersAds(page) {
     return fetch(`${this._url}/ads/me/?page=${page}`, {
       method: "GET",
-      credentials: "include",
       headers: this._headers,
     }).then(this._handleResponse);
   }
@@ -37,7 +29,6 @@ class Api {
   updateUser(data) {
     return fetch(`${this._url}/users/me/`, {
       method: "PATCH",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: this._auth,
@@ -51,7 +42,6 @@ class Api {
     formData.append("image", image);
     return fetch(`${this._url}/users/me/`, formData, {
       method: "PATCH",
-      credentials: "include",
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: this._auth,
@@ -63,7 +53,6 @@ class Api {
   getComments(ad_pk) {
     return fetch(`${this._url}/ads/${ad_pk}/comments/`, {
       method: "GET",
-      credentials: "include",
       headers: this._headers,
     }).then(this._handleResponse);
   }
@@ -71,7 +60,6 @@ class Api {
   getComment(adId, commentId) {
     return fetch(`${this._url}/ads/${adId}/comments/${commentId}/`, {
       method: "GET",
-      credentials: "include",
       headers: this._headers,
     }).then(this._handleResponse);
   }
