@@ -11,7 +11,6 @@ import UserProfile from "../userProfile/UserProfile";
 import SinglePage from "../singlePage/SinglePage";
 import PopupNavigation from "../popopNavigation/PopupNavigation";
 import NewAdd from "../newAdd/NewAdd";
-import EmailLink from "../emailLink/EmailLink";
 import ChangePassword from "../changePassword/ChangePassword";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
@@ -39,8 +38,6 @@ function App(props) {
   const [isComPopupOpen, setIsComPopupOpen] = useState(false);
 
   let navigate = useNavigate();
-
-  console.log(isAuthorized);
 
   useEffect(() => {
     if (isAuthorized) {
@@ -113,20 +110,14 @@ function App(props) {
       .finally(() => setTimeout(() => setIsLoading(false), 500));
   }
 
-  const handleRegistration = ({
-    email,
-    password,
-    first_name,
-    last_name,
-    phone,
-  }) => {
+  const handleRegistration = ({ username, password, role }) => {
     setIsLoading(true);
     auth
-      .registration({ email, password, first_name, last_name, phone })
+      .registration({ username, password, role })
       .then((res) => {
         console.log(res);
         if (res) {
-          handleAuthorization({ email, password });
+          navigate("/sign-in");
         } else {
           Promise.reject(`Ошибка ${res.status}`);
         }
@@ -145,6 +136,7 @@ function App(props) {
       });
   };
 
+  console.log(isAuthorized);
   const handleUpdateUser = (data) => {
     api
       .updateUser(data)
@@ -177,14 +169,19 @@ function App(props) {
   };
 
   const handleAuthorization = (data) => {
+    debugger;
     auth
       .authentication(data)
       .then((res) => {
-        console.log(res);
-        setIsAuthorized(true);
-        navigate.push("/");
+        if (res.status === 200) {
+          console.log(data);
+          localStorage.setItem("authTokens", JSON.stringify(data));
+          setIsAuthorized(true);
+          navigate("/");
+        }
       })
       .catch((error) => {
+        console.log(error);
         setIsAuthorized(false);
         if (error === 500 || "Failed to fetch") return console.log(error);
         if (error === 400) return console.log("Все поля должны быть заполнены");
@@ -204,13 +201,6 @@ function App(props) {
         token,
         new_password,
       })
-      .then(() => navigate.push("/sign-in"))
-      .catch((error) => console.log("error", error));
-  }
-
-  function handlerSendLink({ email }) {
-    auth
-      .sendLink({ email })
       .then(() => navigate.push("/sign-in"))
       .catch((error) => console.log("error", error));
   }
@@ -289,11 +279,6 @@ function App(props) {
             exact
             path="/sign-up"
             element={<Registration handleRegistration={handleRegistration} />}
-          />
-          <Route
-            exact
-            path="/sign-in/email/"
-            element={<EmailLink handlerSendLink={handlerSendLink} />}
           />
           <Route
             exact

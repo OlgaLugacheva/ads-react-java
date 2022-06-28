@@ -19,7 +19,7 @@ class Auth {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    })
+    });
   }
 
   authentication(data) {
@@ -27,17 +27,6 @@ class Auth {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify(data),
-    });
-  }
-
-  //send link to the email
-  sendLink(email) {
-    return fetch(`${this._url}/users/reset_password/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(email),
     });
   }
 
