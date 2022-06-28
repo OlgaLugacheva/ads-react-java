@@ -29,17 +29,6 @@ class Auth {
       body: JSON.stringify(data),
     });
   }
-
-  //change password
-  changePassword(data) {
-    return fetch(`${this._url}/users/reset_password_confirm/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-  }
 }
 
 const auth = new Auth({

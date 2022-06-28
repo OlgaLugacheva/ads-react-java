@@ -11,7 +11,6 @@ import UserProfile from "../userProfile/UserProfile";
 import SinglePage from "../singlePage/SinglePage";
 import PopupNavigation from "../popopNavigation/PopupNavigation";
 import NewAdd from "../newAdd/NewAdd";
-import ChangePassword from "../changePassword/ChangePassword";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
 function App(props) {
@@ -194,17 +193,6 @@ function App(props) {
       });
   };
 
-  function heandlerChangePassword({ uid, token, new_password }) {
-    auth
-      .changePassword({
-        uid,
-        token,
-        new_password,
-      })
-      .then(() => navigate.push("/sign-in"))
-      .catch((error) => console.log("error", error));
-  }
-
   //Open/close navigation when page's size max-width 840px
   const handleOpenPopup = () => {
     setIsPopupNavigatorOpen(true);
@@ -279,13 +267,6 @@ function App(props) {
             exact
             path="/sign-up"
             element={<Registration handleRegistration={handleRegistration} />}
-          />
-          <Route
-            exact
-            path="/password/reset/confirm/:Ng/:id/"
-            element={
-              <ChangePassword heandlerChangePassword={heandlerChangePassword} />
-            }
           />
           <Route
             exact
