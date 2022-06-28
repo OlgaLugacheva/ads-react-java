@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Profile from "../profile/Profile";
 import Ads from "../ads/Ads";
 import Preloader from "../preloader/Preloader";
-import PaginationComponent from "../paginationComponent/PaginationComponent";
 import EditUserImgPopup from "../editUserImgPopup/EditUserImgPopup";
 import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
@@ -37,13 +36,7 @@ function UserProfile(props) {
           <button className="link-btn" />
         </Link>
       </div>
-      <section className="pagination-container padding">
-        <PaginationComponent
-          pageQty={props.pageQty}
-          setPage={props.setPage}
-          page={props.page}
-        />
-      </section>
+      <section className="pagination-container padding"></section>
       {props.isLoading ? <Preloader /> : <Ads ads={props.userAds} />}
       <Ads />
       <EditUserImgPopup

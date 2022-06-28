@@ -23,12 +23,6 @@ function App(props) {
   const [ads, setAds] = useState([]);
   const [adsDefault, setAdsDefault] = useState([]);
   const [userAds, setUserAds] = useState([]);
-  const [pageQty, setPageQty] = useState(0);
-  const [page, setPage] = useState(props.location.search?.split("=")[1] || 1);
-  const [userPageQty, setUserPageQty] = useState(0);
-  const [userPage, setUserPage] = useState(
-    parseInt(props.location.search?.split("=")[1] || 1)
-  );
   //popups
   const [isPopupNavigatorOpen, setIsPopupNavigatorOpen] = useState(false);
   const [isUserPhotoPopupOpen, setIsUserPhotoPopupOpen] = useState(false);
@@ -41,62 +35,57 @@ function App(props) {
   useEffect(() => {
     if (isAuthorized) {
       setIsLoading(true);
-      Promise.all([api.getUsersAds(userPage), api.getUserInfo()])
+      Promise.all([api.getUsersAds(), api.getUserInfo()])
         .then(([usersAds, userInormation]) => {
           setUserAds(usersAds.data.results);
-          setUserPageQty(Math.round(usersAds.data.count / 4));
           setUserInfo(userInormation.data);
         })
         .catch((error) => console.log("error", error))
         .finally(() => setTimeout(() => setIsLoading(false), 700));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthorized, userPage]);
+  }, [isAuthorized]);
 
-  //ads
-  useEffect(() => {
-    setIsLoading(true);
-    isAuthorized && ad
-      ? api
-          .getHiddenAdsTile(page, ad)
-          .then((response) => {
-            setAds(response.data.results);
-            setPageQty(Math.round(response.data.count / 4));
-          })
-          .catch((error) => console.log("error", error))
-          .finally(() => setTimeout(() => setIsLoading(false), 500))
-      : isAuthorized
-      ? api
-          .getHiddenAds(page)
-          .then((response) => {
-            setAds(response.data.results);
-            setPageQty(Math.round(response.data.count / 4));
-          })
-          .catch((error) => console.log("error", error))
-          .finally(() => setTimeout(() => setIsLoading(false), 500))
-      : ad.length
-      ? api
-          .getAdsTitle(ad, page)
-          .then((data) => {
-            setAdsDefault(data.results);
-            setPageQty(Math.round(data.count / 4));
-          })
-          .catch((error) => console.log("error", error))
-          .finally(() => setTimeout(() => setIsLoading(false), 500))
-      : api
-          .getAds(page)
-          .then((data) => {
-            setAdsDefault(data.results);
-            setPageQty(Math.round(data.count / 4));
-          })
-          .catch((error) => console.log("error", error))
-          .finally(() => setTimeout(() => setIsLoading(false), 500));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, isAuthorized, ad, props.history]);
-
-  useEffect(() => {
-    setPage(props.location.search?.split("=")[1] || 1);
-  }, [ad.length, props.location.search]);
+  // //ads
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   isAuthorized && ad
+  //     ? api
+  //         .getHiddenAdsTile(page, ad)
+  //         .then((response) => {
+  //           setAds(response.data.results);
+  //           setPageQty(Math.round(response.data.count / 4));
+  //         })
+  //         .catch((error) => console.log("error", error))
+  //         .finally(() => setTimeout(() => setIsLoading(false), 500))
+  //     : isAuthorized
+  //     ? api
+  //         .getHiddenAds(page)
+  //         .then((response) => {
+  //           setAds(response.data.results);
+  //           setPageQty(Math.round(response.data.count / 4));
+  //         })
+  //         .catch((error) => console.log("error", error))
+  //         .finally(() => setTimeout(() => setIsLoading(false), 500))
+  //     : ad.length
+  //     ? api
+  //         .getAdsTitle(ad, page)
+  //         .then((data) => {
+  //           setAdsDefault(data.results);
+  //           setPageQty(Math.round(data.count / 4));
+  //         })
+  //         .catch((error) => console.log("error", error))
+  //         .finally(() => setTimeout(() => setIsLoading(false), 500))
+  //     : api
+  //         .getAds(page)
+  //         .then((data) => {
+  //           setAdsDefault(data.results);
+  //           setPageQty(Math.round(data.count / 4));
+  //         })
+  //         .catch((error) => console.log("error", error))
+  //         .finally(() => setTimeout(() => setIsLoading(false), 500));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [page, isAuthorized, ad, props.history]);
 
   function handleAddAd(data) {
     setIsLoading(true);
@@ -279,9 +268,6 @@ function App(props) {
                   onClose={closePopup}
                   userInfo={userInfo}
                   userAds={userAds}
-                  pageQty={userPageQty}
-                  page={userPage}
-                  setPage={setUserPage}
                   isLoading={isLoading}
                   handleUpdateUser={handleUpdateUser}
                   handleUpdateUserPhoto={handleUpdateUserPhoto}
@@ -347,9 +333,6 @@ function App(props) {
             path="/"
             element={
               <Main
-                pageQty={pageQty}
-                setPage={setPage}
-                page={page}
                 isAuthorized={isAuthorized}
                 adsDefault={adsDefault}
                 ads={ads}

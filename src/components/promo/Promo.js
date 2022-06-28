@@ -1,9 +1,8 @@
 import React from "react";
 import MediaQuery from "react-responsive";
 import SearchForm from "../searchForm/SearchForm";
-import PaginationComponent from "../paginationComponent/PaginationComponent";
 
-function Promo({ pageQty, ad, setAd, user, setPage, page }) {
+function Promo({ ad, setAd, user }) {
   return (
     <section className="promo">
       <MediaQuery minWidth={801}>
@@ -14,15 +13,14 @@ function Promo({ pageQty, ad, setAd, user, setPage, page }) {
               Лучшая платформа для продажи вещей
             </p>
           </div>
-          <SearchForm ad={ad} setAd={setAd} user={user} page={page} />
+          <SearchForm ad={ad} setAd={setAd} user={user} />
         </div>
       </MediaQuery>
       <MediaQuery maxWidth={800}>
         <h2 className="promo__title">ADS-ONLINE</h2>
         <p className="promo__subtitle">Лучшая платформа для продажи вещей</p>
-        <SearchForm ad={ad} setAd={setAd} user={user} page={page} />
+        <SearchForm ad={ad} setAd={setAd} user={user} />
       </MediaQuery>
-      <PaginationComponent pageQty={pageQty} setPage={setPage} page={page} />
     </section>
   );
 }
