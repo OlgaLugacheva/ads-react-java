@@ -44,6 +44,7 @@ function Registration({ handleRegistration }) {
             title="username"
             name="username"
             type="email"
+            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
             className="form__input"
             onChange={handleChangeInput}
           />
@@ -79,13 +80,13 @@ function Registration({ handleRegistration }) {
             title="Роль"
             name="role"
             type="text"
-            minLength="4"
-            maxLength="5"
+            pattern="^ADMIN|USER$"
+            placeholder="слово дожно состоять только из заглавныx букв"
             className="form__input"
             onChange={handleChangeInput}
           />
           <div className={`input-hidden ${errors.role ? "input-error" : ""}`}>
-            {errors.phone}
+            {errors.role}
           </div>
         </label>
       </>
