@@ -43,10 +43,8 @@ function Registration({ handleRegistration }) {
             value={values.username || ""}
             title="username"
             name="username"
-            type="text"
-            minLength="3"
+            type="email"
             className="form__input"
-            maxLength="30"
             onChange={handleChangeInput}
           />
           <div
@@ -55,40 +53,6 @@ function Registration({ handleRegistration }) {
             {errors.username}
           </div>
         </label>
-        {/* <label className="form__label">
-          <h2 className="form__description">Фамилия</h2>
-          <input
-            required
-            value={values.last_name || ""}
-            title="Фамилия"
-            name="last_name"
-            type="text"
-            minLength="3"
-            className="form__input"
-            maxLength="30"
-            onChange={handleChangeInput}
-          />
-          <div
-            className={`input-hidden ${errors.last_name ? "input-error" : ""}`}
-          >
-            {errors.last_name}
-          </div>
-        </label> */}
-        {/* <label className="form__label">
-          <h2 className="form__description">E-mail</h2>
-          <input
-            required
-            value={values.email || ""}
-            name="email"
-            type="email"
-            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-            className="form__email form__input"
-            onChange={handleChangeInput}
-          />
-          <div className={`input-hidden ${errors.email ? "input-error" : ""}`}>
-            {errors.email}
-          </div>
-        </label> */}
         <label className="form__label">
           <h2 className="form__description">Пароль</h2>
           <input
@@ -112,14 +76,11 @@ function Registration({ handleRegistration }) {
           <input
             required
             value={values.role || ""}
-            // title="Телефон"
             title="Роль"
             name="role"
             type="text"
-            // type="tel"
-            // name="phone"
-            // pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
-            // placeholder="+7(___)___-__-__"
+            minLength="4"
+            maxLength="5"
             className="form__input"
             onChange={handleChangeInput}
           />
