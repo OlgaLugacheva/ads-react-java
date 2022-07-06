@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Form from "../form/Form";
 import useFormValidation from "../../utils/hooks/useFormValidation";
 
-function Login({ handleAuthorization, isLoading }) {
+function Login({ handleAuthorization }) {
   const [input, setInput] = useState("");
   const { values, handleChange, errors, isValid } = useFormValidation();
 
@@ -32,7 +32,6 @@ function Login({ handleAuthorization, isLoading }) {
       btn="Войти"
       link="/sign-up"
       linkTitle="Создать аккаунт"
-      newPassword="Восстановить пароль"
       errors={!isValid}
     >
       <>
@@ -41,17 +40,16 @@ function Login({ handleAuthorization, isLoading }) {
           <input
             required
             name="username"
-            type="text"
             value={values.username || ""}
-            // type="email"
-            // value={values.email || ""}
-            // pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-            minLength="1"
+            type="email"
+            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
             autoComplete="on"
             className="form__email form__input"
             onChange={handleChangeInput}
           />
-          <div className={`input-hidden ${errors.username ? "input-error" : ""}`}>
+          <div
+            className={`input-hidden ${errors.username ? "input-error" : ""}`}
+          >
             {errors.username}
           </div>
         </label>

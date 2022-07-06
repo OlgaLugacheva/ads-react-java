@@ -31,16 +31,6 @@ function Form(props) {
               {props.linkTitle}
             </Link>
           </h2>
-          {location === "/sign-in" ? (
-            <Link to="/sign-in/email" className="form__link">
-              <p className="form__question form__link form__margin">
-                {props.newPassword}
-              </p>
-              <div className="input-error input-hidden"></div>
-            </Link>
-          ) : (
-            ""
-          )}
         </div>
       </div>
     </main>
