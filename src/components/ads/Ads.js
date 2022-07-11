@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
 import Ad from "../ad/Ad";
 
-function Ads({ ads }) {
-  let { user } = useContext(AuthContext);
+function Ads({ ads, isAuthorized }) {
   let location = useLocation().pathname;
+
   return (
     <section className={`ads ${location === "/profile" ? "padding" : ""}`}>
       {!ads.length ? (
@@ -18,20 +17,20 @@ function Ads({ ads }) {
               : "ads__container"
           }`}
         >
-          {ads.map((card) => {
+          {ads.map((ad) => {
             return (
               <Link
-                key={card.pk}
-                to={user ? `ads/${card.pk}` : "/"}
+                key={ad.pk}
+                to={isAuthorized ? `ads/${ad.pk}` : "/"}
                 className="ads__link"
               >
                 <Ad
-                  key={card.pk}
-                  pk={card.pk}
-                  title={card.title}
-                  image={card.image}
-                  price={card.price}
-                  description={card.description}
+                  key={ad.pk}
+                  pk={ad.pk}
+                  title={ad.title}
+                  image={ad.image}
+                  price={ad.price}
+                  description={ad.description}
                 />
               </Link>
             );
