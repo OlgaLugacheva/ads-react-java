@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Ad from "../ad/Ad";
 
-function Ads({ ads, isAuthorized }) {
+function Ads({ ads, isAuthorized, visiableAds }) {
   let location = useLocation().pathname;
 
   return (
@@ -17,7 +17,7 @@ function Ads({ ads, isAuthorized }) {
               : "ads__container"
           }`}
         >
-          {ads.map((ad) => {
+          {ads.slice(0, visiableAds).map((ad) => {
             return (
               <Link
                 key={ad.pk}
