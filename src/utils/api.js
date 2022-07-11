@@ -65,29 +65,15 @@ class Api {
   }
 
   //ads
-  getAds(page) {
-    return fetch(this._url + `page=${page}`, {
+  getAds() {
+    return fetch(`${this._url}/ads`, {
       method: "GET",
       headers: this._headers,
     }).then(this._handleResponse);
   }
 
-  getAdsTitle(ad, page) {
-    return fetch(this._url + `title=${ad}&page=${page}`, {
-      method: "GET",
-      headers: this._headers,
-    }).then(this._handleResponse);
-  }
-
-  getHiddenAds(page) {
-    return fetch(this._url + `page=${page}`, {
-      method: "GET",
-      headers: this._headers,
-    }).then(this._handleResponse);
-  }
-
-  getHiddenAdsTile(page, ad) {
-    return fetch(this._url + `page=${page}&title=${ad}`, {
+  getHiddenAds() {
+    return fetch(`${this._url}/ads`, {
       method: "GET",
       headers: this._headers,
     }).then(this._handleResponse);

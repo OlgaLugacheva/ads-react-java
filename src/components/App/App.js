@@ -49,43 +49,23 @@ function App(props) {
   // //ads
   // useEffect(() => {
   //   setIsLoading(true);
-  //   isAuthorized && ad
+  //     isAuthorized
   //     ? api
-  //         .getHiddenAdsTile(page, ad)
+  //         .getHiddenAds()
   //         .then((response) => {
   //           setAds(response.data.results);
-  //           setPageQty(Math.round(response.data.count / 4));
   //         })
   //         .catch((error) => console.log("error", error))
-  //         .finally(() => setTimeout(() => setIsLoading(false), 500))
-  //     : isAuthorized
-  //     ? api
-  //         .getHiddenAds(page)
-  //         .then((response) => {
-  //           setAds(response.data.results);
-  //           setPageQty(Math.round(response.data.count / 4));
-  //         })
-  //         .catch((error) => console.log("error", error))
-  //         .finally(() => setTimeout(() => setIsLoading(false), 500))
-  //     : ad.length
-  //     ? api
-  //         .getAdsTitle(ad, page)
-  //         .then((data) => {
-  //           setAdsDefault(data.results);
-  //           setPageQty(Math.round(data.count / 4));
-  //         })
-  //         .catch((error) => console.log("error", error))
-  //         .finally(() => setTimeout(() => setIsLoading(false), 500))
+  //         .finally(() => setTimeout(() => setIsLoading(false), 500)))
   //     : api
   //         .getAds(page)
   //         .then((data) => {
   //           setAdsDefault(data.results);
-  //           setPageQty(Math.round(data.count / 4));
   //         })
   //         .catch((error) => console.log("error", error))
   //         .finally(() => setTimeout(() => setIsLoading(false), 500));
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [page, isAuthorized, ad, props.history]);
+  // }, [ isAuthorized ]);
 
   function handleAddAd(data) {
     setIsLoading(true);
@@ -124,7 +104,6 @@ function App(props) {
       });
   };
 
-  console.log(isAuthorized);
   const handleUpdateUser = (data) => {
     api
       .updateUser(data)
