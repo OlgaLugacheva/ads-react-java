@@ -21,6 +21,7 @@ function Promo({ ad, setAd, user }) {
         <p className="promo__subtitle">Лучшая платформа для продажи вещей</p>
         <SearchForm ad={ad} setAd={setAd} user={user} />
       </MediaQuery>
+      <div className="promo-border"/>
     </section>
   );
 }
