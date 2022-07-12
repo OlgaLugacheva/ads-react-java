@@ -20,7 +20,9 @@ function Registration({ handleRegistration }) {
       //Передаём значения управляемых компонентов во внешний обработчик
       username: values.username,
       password: values.password,
-      role: values.role,
+      // role: values.role,
+      firstName: values.firstName,
+      phone: values.phone,
     });
   }
 
@@ -72,7 +74,7 @@ function Registration({ handleRegistration }) {
             {errors.password}
           </div>
         </label>
-        <label className="form__label">
+        {/* <label className="form__label">
           <h2 className="form__description">Роль</h2>
           <input
             required
@@ -87,6 +89,61 @@ function Registration({ handleRegistration }) {
           />
           <div className={`input-hidden ${errors.role ? "input-error" : ""}`}>
             {errors.role}
+          </div>
+        </label> */}
+        <label className="form__label">
+          <h2 className="form__description">Имя</h2>
+          <input
+            required
+            value={values.firstName || ""}
+            title="Имя"
+            name="firstName"
+            type="text"
+            minLength="3"
+            className="form__input"
+            maxLength="30"
+            onChange={handleChangeInput}
+          />
+          <div
+            className={`input-hidden ${errors.firstName ? "input-error" : ""}`}
+          >
+            {errors.firstName}
+          </div>
+        </label>
+        <label className="form__label">
+          <h2 className="form__description">Фамилия</h2>
+          <input
+            required
+            value={values.lastName || ""}
+            title="Фамилия"
+            name="lastName"
+            type="text"
+            minLength="3"
+            className="form__input"
+            maxLength="30"
+            onChange={handleChangeInput}
+          />
+          <div
+            className={`input-hidden ${errors.lastName ? "input-error" : ""}`}
+          >
+            {errors.lastName}
+          </div>
+        </label>
+        <label className="form__label">
+          <h2 className="form__description">Телефон</h2>
+          <input
+            required
+            value={values.phone || ""}
+            title="Телефон"
+            type="tel"
+            name="phone"
+            pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
+            placeholder="+7(___)___-__-__"
+            className="form__input"
+            onChange={handleChangeInput}
+          />
+          <div className={`input-hidden ${errors.phone ? "input-error" : ""}`}>
+            {errors.phone}
           </div>
         </label>
       </>

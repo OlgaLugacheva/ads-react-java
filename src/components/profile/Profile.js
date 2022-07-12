@@ -17,11 +17,10 @@ function Profile({ userInfo, handleUpdateUser }) {
   function handleUpdate(e) {
     e.preventDefault();
     handleUpdateUser({
-      first_name: values.first_name,
-      last_name: values.last_name,
+      firstName: values.firstName,
+      lastName: values.lastName,
       phone: values.phone,
     });
-    window.location.reload();
   }
 
   useEffect(() => {
@@ -31,7 +30,7 @@ function Profile({ userInfo, handleUpdateUser }) {
   return (
     <UserForm
       title="Привет,"
-      userName={userInfo.first_name}
+      userName={userInfo.firstName}
       onSubmit={handleUpdate}
       buttonText="Сохранить"
       errors={!isValid}
@@ -40,9 +39,9 @@ function Profile({ userInfo, handleUpdateUser }) {
       <label className="userForm__label-profile">
         <h2 className="userForm__subtitle">Имя</h2>
         <input
-          value={values.first_name || ""}
+          value={values.firstName || ""}
           title="Имя"
-          name="first_name"
+          name="firstName"
           type="text"
           minLength="3"
           required
@@ -52,17 +51,17 @@ function Profile({ userInfo, handleUpdateUser }) {
           onChange={handleChangeInput}
         />
         <div
-          className={`input-hidden ${errors.first_name ? "input-error" : ""}`}
+          className={`input-hidden ${errors.firstName ? "input-error" : ""}`}
         >
-          {errors.first_name}
+          {errors.firstName}
         </div>
       </label>
       <label className="userForm__label-profile">
         <h2 className="userForm__subtitle">Фамилия</h2>
         <input
-          value={values.last_name || ""}
+          value={values.lastName || ""}
           title="Фамилия"
-          name="last_name"
+          name="lastName"
           type="text"
           required
           minLength="3"
@@ -71,10 +70,8 @@ function Profile({ userInfo, handleUpdateUser }) {
           maxLength="30"
           onChange={handleChangeInput}
         />
-        <div
-          className={`input-hidden ${errors.last_name ? "input-error" : ""}`}
-        >
-          {errors.last_name}
+        <div className={`input-hidden ${errors.lastName ? "input-error" : ""}`}>
+          {errors.lastName}
         </div>
       </label>
       <label className="userForm__label-profile">

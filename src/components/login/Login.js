@@ -26,7 +26,6 @@ function Login({ handleAuthorization }) {
   return (
     <Form
       header="Рады видеть!"
-      // onSubmit={loginUser}
       onSubmit={handleSubmit}
       path="/profile"
       btn="Войти"
