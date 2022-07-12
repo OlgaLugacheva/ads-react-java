@@ -1,8 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Ad from "../ad/Ad";
+import AdsCardListButton from "../adsCardListButton/AdsCardListButton";
 
-function Ads({ ads, isAuthorized, visiableAds }) {
+function Ads({ ads, isAuthorized, visiableAds, showMoreAds }) {
   let location = useLocation().pathname;
 
   return (
@@ -12,9 +13,7 @@ function Ads({ ads, isAuthorized, visiableAds }) {
       ) : (
         <ul
           className={`ads__container ${
-            location === "/profile"
-              ? "ads__container-profile"
-              : "ads__container"
+            location === "/profile" ? "ads__container-profile" : ""
           }`}
         >
           {ads.slice(0, visiableAds).map((ad) => {
@@ -36,6 +35,9 @@ function Ads({ ads, isAuthorized, visiableAds }) {
             );
           })}
         </ul>
+      )}
+      {visiableAds < ads.length && (
+        <AdsCardListButton showMoreAds={showMoreAds} />
       )}
     </section>
   );
