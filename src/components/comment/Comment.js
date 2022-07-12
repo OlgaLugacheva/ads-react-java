@@ -1,42 +1,41 @@
-import React, { useState, useEffect, useContext } from "react";
-import MainContext from "../../context/MainContext";
-import AuthContext from "../../context/AuthContext";
+import React, { useState, useEffect } from "react";
+import api from "../../utils/api";
+
 import Buttons from "../buttons/Buttons";
 import EditCommentPopup from "../editCommentPopup/EditCommentPopup";
 import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
 function Comment(
   comment,
-  { setComments, handleEditCommPopupOpen, isComPopupOpen, onClose }
+  { setComments, handleEditCommPopupOpen, isComPopupOpen, onClose, user }
 ) {
-  const [getComm, setGetComm] = useState({});
-  const { getComment, deleteComment, editComment } = useContext(MainContext);
-  const { user } = useContext(AuthContext);
+  const [adComment, setAdComment] = useState({});
   const currentCommentid = comment.commentId;
 
   useEffect(() => {
-    getComment(comment.adId, comment.commentId)
+    api
+      .getComment(comment.adId, comment.commentId)
       .then((res) => {
-        setGetComm(res.data);
+        setAdComment(res.data);
       })
       .catch((error) => console.log("error", error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comment.adId, comment.commentId, comment]);
 
   const handleEditComment = (data) => {
-    editComment(comment.adId, comment.commentId, data)
+    api
+      .editComment(comment.adId, comment.commentId, data)
       .then((res) => {
-        window.location.reload();
-        setGetComm(res.data);
+        setAdComment(res.data);
       })
       .catch((error) => console.log("error", error));
   };
 
   const onDelete = (e) => {
     e.preventDefault();
-    deleteComment(comment.adId, comment.commentId)
+    api
+      .deleteComment(comment.adId, comment.commentId)
       .then(() => {
-        window.location.reload();
         setComments((comments) =>
           comments.filter((i) => i.id !== comment.commentId)
         );
@@ -58,12 +57,12 @@ function Comment(
       </div>
       <div className="commentBox">
         <p className="comment-text comment-message">{comment.text}</p>
-        {user.user_id === comment.userId ? (
+        {user === comment.userId ? (
           <Buttons
             className="comment-buttons"
             classButton="comment-button"
             onOpen={
-              currentCommentid === getComm.pk ? handleEditCommPopupOpen : null
+              currentCommentid === adComment.pk ? handleEditCommPopupOpen : null
             }
             onSubmit={onDelete}
             key={comment.pk}
@@ -73,12 +72,12 @@ function Comment(
           onClose={onClose}
           isOpen={isComPopupOpen}
           id={comment.adId}
-          getComm={getComm}
+          getComm={adComment}
           handleEdit={handleEditComment}
-          userId={user.user_id}
+          userId={user}
           commentUserId={comment.userId}
           commentId={comment.commentId}
-          currentComId={getComm.pk}
+          currentComId={adComment.pk}
           key={comment.pk}
         />
       </div>
