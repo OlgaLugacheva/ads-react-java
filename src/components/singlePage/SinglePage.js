@@ -30,16 +30,16 @@ function SinglePage(props) {
   }, [props.isAuthorized]);
 
   function handleEditAdd(data) {
-    debugger;
+    props.setIsLoading(true);
     api
       .editAdd(id, data)
       .then((data) => {
         props.setAds((ads) =>
           ads.filter((i) => (i.id === ad.pk ? data : null))
         );
-        window.location.reload();
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log("error", error))
+      .finally(() => setTimeout(() => props.setIsLoading(false), 700));
   }
 
   function handleEditPhotoAdd(image) {
@@ -49,7 +49,6 @@ function SinglePage(props) {
         props.setAds((ads) =>
           ads.filter((i) => (i.id === ad.pk ? image : null))
         );
-        window.location.reload();
       })
       .catch((error) => console.log("error", error));
   }
@@ -69,7 +68,6 @@ function SinglePage(props) {
       .addComment(id, data)
       .then((newComment) => {
         setComments([newComment, ...comments]);
-        window.location.reload();
       })
       .catch((error) => console.log("error", error));
   }
@@ -85,7 +83,7 @@ function SinglePage(props) {
             <div className="cardInformation__container">
               {ad.image === null ? (
                 <div className="cardInformation__img-null">
-                  {props.user.user_id === ad.author_id ? (
+                  {props.user === ad.author_id ? (
                     <button
                       onClick={props.handleOpenEditPhotoPopup}
                       className="cardInformation__img-change"
@@ -98,7 +96,7 @@ function SinglePage(props) {
                   style={{ backgroundImage: `url(${ad.image})` }}
                   className="cardInformation__img"
                 >
-                  {props.user.user_id === ad.author_id ? (
+                  {props.user === ad.author_id ? (
                     <button
                       onClick={props.handleOpenEditPhotoPopup}
                       className="cardInformation__img-change"
@@ -107,7 +105,7 @@ function SinglePage(props) {
                   ) : null}
                 </div>
               )}
-              {props.user.user_id !== ad.author_id ? null : (
+              {props.user !== ad.author_id ? null : (
                 <Buttons
                   user={props.user}
                   product={ad}
@@ -138,7 +136,7 @@ function SinglePage(props) {
             </div>
             <EditAdPopup
               isEditPopupOpen={props.isEditPopupOpen}
-              onClose={props.closePopup}
+              onClose={props.onClose}
               handleEditAdd={handleEditAdd}
               id={id}
               ad={ad}
@@ -147,7 +145,7 @@ function SinglePage(props) {
               id={id}
               handleEdit={handleEditPhotoAdd}
               isOpen={props.isEditPhotoPopupOpen}
-              onClose={props.closePopup}
+              onClose={props.onClose}
             />
           </>
         )
