@@ -12,13 +12,14 @@ import SinglePage from "../singlePage/SinglePage";
 import PopupNavigation from "../popopNavigation/PopupNavigation";
 import NewAdd from "../newAdd/NewAdd";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
-import userProducts from "../../utils/usersProducts";
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   //user
   const [userInfo, setUserInfo] = useState({});
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   //ads
   const [ad, setAd] = useState("");
   const [ads, setAds] = useState([]);
@@ -50,15 +51,11 @@ function App() {
   }
 
   useEffect(() => {
-    setUserAds(userProducts);
-  }, [ads, adsDefault, ad, isAuthorized]);
-
-  useEffect(() => {
     if (isAuthorized) {
       setIsLoading(true);
       Promise.all([api.getUsersAds(), api.getUserInfo()])
         .then(([usersAds, userInormation]) => {
-          //setUserAds(usersAds)
+          setUserAds(usersAds)
           setUserInfo(userInormation);
         })
         .catch((error) => console.log("error", error))
@@ -117,16 +114,17 @@ function App() {
 
   const handleUpdateUser = (data) => {
     api
-      .updateUser(data)
+      .updateUser(data, username, password)
       .then((res) => {
-        setUserInfo({
-          ...userInfo,
-          firstName: res.data.firstName,
-          lastName: res.data.lastName,
-          phone: res.data.phone,
-          username: res.data.username,
-          id: res.data.id,
-        });
+      console.log(res.data)
+        // setUserInfo({
+        //   ...userInfo,
+        //   firstName: res.data.firstName,
+        //   lastName: res.data.lastName,
+        //   phone: res.data.phone,
+        //   username: res.data.username,
+        //   id: res.data.id,
+        // });
       })
       .catch((error) => {
         console.log("error", error);
@@ -152,6 +150,8 @@ function App() {
       .authentication(data)
       .then((res) => {
         if (res.status === 200) {
+          setUsername(data.username)
+          setPassword(data.password)
           localStorage.setItem("authTokens", JSON.stringify(data));
           setIsAuthorized(true);
           navigate("/");
