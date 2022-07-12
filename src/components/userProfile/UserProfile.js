@@ -13,13 +13,10 @@ function UserProfile(props) {
         <div className="userProfile-container">
           <div
             className="profile-avatar"
-            // style={{
-            //   backgroundImage: `url(${
-            //     props.userInfo.image ? props.userInfo.image : defaultImg
-            //   })`,
-            // }}
             style={{
-              backgroundImage: `url(${defaultImg})`,
+              backgroundImage: `url(${
+                props.userInfo.image ? props.userInfo.image : defaultImg
+              })`,
             }}
           >
             <button className="profile-avatar__button" onClick={props.onOpen} />
@@ -37,8 +34,16 @@ function UserProfile(props) {
         </Link>
       </div>
       <section className="pagination-container padding"></section>
-      {props.isLoading ? <Preloader /> : <Ads ads={props.userAds} />}
-      <Ads />
+      {props.isLoading ? (
+        <Preloader />
+      ) : (
+        <Ads
+          ads={props.userAds}
+          visiableAds={props.visiableAds}
+          showMoreAds={props.showMoreAds}
+          isAuthorized={props.isAuthorized}
+        />
+      )}
       <EditUserImgPopup
         isOpen={props.isOpen}
         onClose={props.onClose}
