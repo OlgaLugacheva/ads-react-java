@@ -12,17 +12,20 @@ import SinglePage from "../singlePage/SinglePage";
 import PopupNavigation from "../popopNavigation/PopupNavigation";
 import NewAdd from "../newAdd/NewAdd";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
+import userProducts from "../../utils/usersProducts";
 
-function App(props) {
+function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   //user
   const [userInfo, setUserInfo] = useState({});
   //ads
-  const [ad, setAd] = useState({});
+  const [ad, setAd] = useState("");
   const [ads, setAds] = useState([]);
+  //const [filteredAds, setFilteredAds] = useState([]);
   const [adsDefault, setAdsDefault] = useState([]);
   const [userAds, setUserAds] = useState([]);
+  const [visiableAds, setVisiableAds] = useState(4);
   //popups
   const [isPopupNavigatorOpen, setIsPopupNavigatorOpen] = useState(false);
   const [isUserPhotoPopupOpen, setIsUserPhotoPopupOpen] = useState(false);
@@ -32,13 +35,31 @@ function App(props) {
 
   let navigate = useNavigate();
 
+  //search ad by title
+  function searcAd(cards, card) {
+    return cards.filter((value) =>
+      value.title.toLowerCase().includes(card.toLowerCase())
+    );
+  }
+
+  //pagination
+  function showMoreAds() {
+    setVisiableAds((prevValue) => {
+      return prevValue + 2;
+    });
+  }
+
+  useEffect(() => {
+    setUserAds(userProducts);
+  }, [ads, adsDefault, ad, isAuthorized]);
+
   useEffect(() => {
     if (isAuthorized) {
       setIsLoading(true);
       Promise.all([api.getUsersAds(), api.getUserInfo()])
         .then(([usersAds, userInormation]) => {
-          setUserAds(usersAds.data.results);
-          setUserInfo(userInormation.data);
+          //setUserAds(usersAds)
+          setUserInfo(userInormation);
         })
         .catch((error) => console.log("error", error))
         .finally(() => setTimeout(() => setIsLoading(false), 700));
@@ -46,44 +67,34 @@ function App(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthorized]);
 
-  // //ads
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //     isAuthorized
-  //     ? api
-  //         .getHiddenAds()
-  //         .then((response) => {
-  //           setAds(response.data.results);
-  //         })
-  //         .catch((error) => console.log("error", error))
-  //         .finally(() => setTimeout(() => setIsLoading(false), 500)))
-  //     : api
-  //         .getAds(page)
-  //         .then((data) => {
-  //           setAdsDefault(data.results);
-  //         })
-  //         .catch((error) => console.log("error", error))
-  //         .finally(() => setTimeout(() => setIsLoading(false), 500));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [ isAuthorized ]);
-
-  function handleAddAd(data) {
+  //ads
+  useEffect(() => {
     setIsLoading(true);
-    api
-      .addAd(data)
-      .then((newAd) => {
-        setAds([newAd, ...ads]);
-      })
-      .catch((error) => console.log("error", error))
-      .finally(() => setTimeout(() => setIsLoading(false), 500));
-  }
+    isAuthorized
+      ? api
+          .getHiddenAds()
+          .then((response) => {
+            setAds(response.results);
+          })
+          .catch((error) => console.log("error", error))
+          .finally(() => setTimeout(() => setIsLoading(false), 500))
+      : api
+          .getAds()
+          .then((data) => {
+            setAdsDefault(data.results);
+          })
+          .catch((error) => console.log("error", error))
+          .finally(() => setTimeout(() => setIsLoading(false), 500));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthorized]);
+
+  let filteredAds = isAuthorized ? searcAd(ads, ad) : searcAd(adsDefault, ad);
 
   const handleRegistration = ({ username, password, role }) => {
     setIsLoading(true);
     auth
       .registration({ username, password, role })
       .then((res) => {
-        console.log(res);
         if (res) {
           navigate("/sign-in");
         } else {
@@ -110,11 +121,12 @@ function App(props) {
       .then((res) => {
         setUserInfo({
           ...userInfo,
-          first_name: res.data.first_name,
-          last_name: res.data.last_name,
+          firstName: res.data.firstName,
+          lastName: res.data.lastName,
           phone: res.data.phone,
+          username: res.data.username,
+          id: res.data.id,
         });
-        localStorage.setItem("userPers", JSON.stringify(userInfo));
       })
       .catch((error) => {
         console.log("error", error);
@@ -136,12 +148,10 @@ function App(props) {
   };
 
   const handleAuthorization = (data) => {
-    debugger;
     auth
       .authentication(data)
       .then((res) => {
         if (res.status === 200) {
-          console.log(data);
           localStorage.setItem("authTokens", JSON.stringify(data));
           setIsAuthorized(true);
           navigate("/");
@@ -160,6 +170,29 @@ function App(props) {
         setTimeout(() => setIsLoading(false), 700);
       });
   };
+
+  function handleAddAd(data) {
+    setIsLoading(true);
+    api
+      .addAd(data)
+      .then((newAd) => {
+        console.log(newAd);
+        //setAds([newAd, ...ads]);
+      })
+      .catch((error) => console.log("error", error))
+      .finally(() => setTimeout(() => setIsLoading(false), 500));
+  }
+
+  function signOut() {
+    localStorage.removeItem("authTokens");
+    setAd([]);
+    setAds([]);
+    setIsAuthorized(false);
+    setUserAds([]);
+    setUserInfo([]);
+    window.location.reload();
+    navigate("/sign-in");
+  }
 
   //Open/close navigation when page's size max-width 840px
   const handleOpenPopup = () => {
@@ -218,7 +251,11 @@ function App(props) {
   }, []);
   return (
     <div className="app">
-      <Header onOpen={handleOpenPopup} isAuthorized={isAuthorized} />
+      <Header
+        onOpen={handleOpenPopup}
+        isAuthorized={isAuthorized}
+        signOut={signOut}
+      />
       <>
         <Routes>
           <Route
@@ -242,6 +279,7 @@ function App(props) {
             element={
               <ProtectedRoute user={isAuthorized}>
                 <UserProfile
+                  isAuthorized={isAuthorized}
                   isOpen={isUserPhotoPopupOpen}
                   onOpen={handleOpenUserPhotoPopup}
                   onClose={closePopup}
@@ -250,6 +288,8 @@ function App(props) {
                   isLoading={isLoading}
                   handleUpdateUser={handleUpdateUser}
                   handleUpdateUserPhoto={handleUpdateUserPhoto}
+                  visiableAds={visiableAds}
+                  showMoreAds={showMoreAds}
                 />
               </ProtectedRoute>
             }
@@ -300,7 +340,7 @@ function App(props) {
           />
           <Route
             exact
-            path="/NewAdd"
+            path="/newAd"
             element={
               <ProtectedRoute user={isAuthorized}>
                 <NewAdd handleAddAd={handleAddAd} isLoading={isLoading} />
@@ -313,18 +353,24 @@ function App(props) {
             element={
               <Main
                 isAuthorized={isAuthorized}
-                adsDefault={adsDefault}
-                ads={ads}
+                adsDefault={filteredAds}
+                ads={filteredAds}
                 isLoading={isLoading}
                 ad={ad}
                 setAd={setAd}
+                showMoreAds={showMoreAds}
+                visiableAds={visiableAds}
               />
             }
           />
         </Routes>
       </>
       <Footer />
-      <PopupNavigation onClose={closePopup} isOpen={isPopupNavigatorOpen} />
+      <PopupNavigation
+        onClose={closePopup}
+        isOpen={isPopupNavigatorOpen}
+        logOut={signOut}
+      />
     </div>
   );
 }
