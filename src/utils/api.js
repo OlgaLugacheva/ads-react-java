@@ -1,3 +1,5 @@
+import base64 from "react-native-base64";
+
 class Api {
   constructor(options) {
     this._url = options.url;
@@ -31,7 +33,7 @@ class Api {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Basic ${username} ${password}`,
+        Authorization: `Basic ${base64.encode}(${username} ${password})`,
       },
     }).then(this._handleResponse);
   }
