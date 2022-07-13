@@ -34,7 +34,7 @@ class Api {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        'Authorization': 'Basic ' + base64.encode(`${username} ${password}`),
+        'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
       },
     }).then(this._handleResponse);
   }
