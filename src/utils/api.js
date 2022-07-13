@@ -30,10 +30,11 @@ class Api {
   updateUser(data, username, password) {
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
+      //credentials: 'include',
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        'Authorization': 'Basic' + base64.encode(`${username} ${password}`),
+        'Authorization': 'Basic ' + base64.encode(`${username} ${password}`),
       },
     }).then(this._handleResponse);
   }
