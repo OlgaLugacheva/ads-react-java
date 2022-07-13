@@ -1,4 +1,4 @@
-import base64 from "react-native-base64";
+import base64 from 'base-64';
 
 class Api {
   constructor(options) {
