@@ -18,7 +18,10 @@ function SinglePage(props) {
   useEffect(() => {
     if (props.isAuthorized) {
       props.setIsLoading(true);
-      Promise.all([api.getComments(ad_pk), api.getAd(id)])
+      Promise.all([
+        api.getComments(ad_pk, props.username, props.password),
+        api.getAd(id, props.username, props.password),
+      ])
         .then(([commentsData, adData]) => {
           setComments(commentsData.data.results);
           setAd(adData.data);
@@ -32,7 +35,7 @@ function SinglePage(props) {
   function handleEditAdd(data) {
     props.setIsLoading(true);
     api
-      .editAdd(id, data)
+      .editAdd(id, data, props.username, props.password)
       .then((data) => {
         props.setAds((ads) =>
           ads.filter((i) => (i.id === ad.pk ? data : null))
@@ -44,7 +47,7 @@ function SinglePage(props) {
 
   function handleEditPhotoAdd(image) {
     api
-      .editAddPhoto(id, image)
+      .editAddPhoto(id, image, props.username, props.password)
       .then((image) => {
         props.setAds((ads) =>
           ads.filter((i) => (i.id === ad.pk ? image : null))
@@ -55,7 +58,7 @@ function SinglePage(props) {
 
   function handleDeleteAdd(e) {
     api
-      .deleteAdd(id)
+      .deleteAdd(id, props.username, props.password)
       .then(() => {
         props.setAds((ads) => ads.filter((i) => i.id !== ad.id));
         history.push("/");
@@ -65,7 +68,7 @@ function SinglePage(props) {
 
   function handleAddComment(data) {
     api
-      .addComment(id, data)
+      .addComment(id, data, props.username, props.password)
       .then((newComment) => {
         setComments([newComment, ...comments]);
       })
@@ -132,6 +135,8 @@ function SinglePage(props) {
                 handleEditCommPopupOpen={props.handleEditCommPopupOpen}
                 setComments={setComments}
                 user={props.user}
+                username={props.username}
+                password={props.password}
               />
             </div>
             <EditAdPopup

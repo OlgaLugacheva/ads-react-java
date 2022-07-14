@@ -1,7 +1,7 @@
 import React from "react";
 import Comment from "../comment/Comment";
 
-function CommentList({ comments, setComments, user }) {
+function CommentList({ comments, setComments, user }, username, password) {
   return (
     <>
       {!comments.length ? (
@@ -20,6 +20,8 @@ function CommentList({ comments, setComments, user }) {
                 setComments={setComments}
                 authorName={comment.author_first_name}
                 user={user}
+                username={username}
+                password={password}
               />
             );
           })}

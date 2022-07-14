@@ -18,8 +18,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   //user
   const [userInfo, setUserInfo] = useState({});
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   //ads
   const [ad, setAd] = useState("");
   const [ads, setAds] = useState([]);
@@ -53,9 +53,12 @@ function App() {
   useEffect(() => {
     if (isAuthorized) {
       setIsLoading(true);
-      Promise.all([api.getUsersAds(), api.getUserInfo()])
+      Promise.all([
+        api.getUsersAds(username, password),
+        api.getUserInfo(username, password),
+      ])
         .then(([usersAds, userInormation]) => {
-          setUserAds(usersAds)
+          setUserAds(usersAds);
           setUserInfo(userInormation);
         })
         .catch((error) => console.log("error", error))
@@ -69,7 +72,7 @@ function App() {
     setIsLoading(true);
     isAuthorized
       ? api
-          .getHiddenAds()
+          .getHiddenAds(username, password)
           .then((response) => {
             setAds(response.results);
           })
@@ -116,15 +119,14 @@ function App() {
     api
       .updateUser(data, username, password)
       .then((res) => {
-      console.log(res.data)
-        // setUserInfo({
-        //   ...userInfo,
-        //   firstName: res.data.firstName,
-        //   lastName: res.data.lastName,
-        //   phone: res.data.phone,
-        //   username: res.data.username,
-        //   id: res.data.id,
-        // });
+        setUserInfo({
+          ...userInfo,
+          firstName: res.data.firstName,
+          lastName: res.data.lastName,
+          phone: res.data.phone,
+          username: res.data.username,
+          id: res.data.id,
+        });
       })
       .catch((error) => {
         console.log("error", error);
@@ -133,7 +135,7 @@ function App() {
 
   const handleUpdateUserPhoto = (image) => {
     api
-      .updateUserPhoto(image)
+      .updateUserPhoto(image, username, password)
       .then((res) => {
         setUserInfo({
           ...userInfo,
@@ -150,8 +152,8 @@ function App() {
       .authentication(data)
       .then((res) => {
         if (res.status === 200) {
-          setUsername(data.username)
-          setPassword(data.password)
+          setUsername(data.username);
+          setPassword(data.password);
           localStorage.setItem("authTokens", JSON.stringify(data));
           setIsAuthorized(true);
           navigate("/");
@@ -174,10 +176,9 @@ function App() {
   function handleAddAd(data) {
     setIsLoading(true);
     api
-      .addAd(data)
+      .addAd(data, username, password)
       .then((newAd) => {
-        console.log(newAd);
-        //setAds([newAd, ...ads]);
+        setAds([newAd, ...ads]);
       })
       .catch((error) => console.log("error", error))
       .finally(() => setTimeout(() => setIsLoading(false), 500));
@@ -312,6 +313,8 @@ function App() {
                   isLoading={isLoading}
                   user={userInfo.id}
                   setAds={setAds}
+                  username={username}
+                  password={password}
                 />
               </ProtectedRoute>
             }
@@ -334,6 +337,8 @@ function App() {
                   isLoading={isLoading}
                   user={userInfo.id}
                   setAds={setAds}
+                  username={username}
+                  password={password}
                 />
               </ProtectedRoute>
             }

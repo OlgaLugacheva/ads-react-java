@@ -1,9 +1,8 @@
-import base64 from 'base-64';
+import base64 from "base-64";
 
 class Api {
   constructor(options) {
     this._url = options.url;
-    this._headers = options.headers;
   }
 
   _handleResponse(res) {
@@ -13,17 +12,23 @@ class Api {
     return Promise.reject(`Error: ${res.status}`);
   }
   //user
-  getUserInfo = async () => {
+  getUserInfo = async (username, password) => {
     return await fetch(`${this._url}/users/me`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
+      },
     }).then(this._handleResponse);
   };
 
-  getUsersAds = async () => {
+  getUsersAds = async (username, password) => {
     return await fetch(`${this._url}/ads/me`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
+      },
     }).then(this._handleResponse);
   };
 
@@ -34,66 +39,72 @@ class Api {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
     }).then(this._handleResponse);
   }
 
-  updateUserPhoto(image) {
+  updateUserPhoto(image, username, password) {
     const formData = new FormData();
     formData.append("image", image);
     return fetch(`${this._url}/users/me`, formData, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
     }).then(this._handleResponse);
   }
 
   //comment|comments
-  getComments(ad_pk) {
+  getComments(ad_pk, username, password) {
     return fetch(`${this._url}/ads/${ad_pk}/comments`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
+      },
     }).then(this._handleResponse);
   }
 
-  getComment(adId, commentId) {
+  getComment(adId, commentId, username, password) {
     return fetch(`${this._url}/ads/${adId}/comments/${commentId}`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
+      },
     }).then(this._handleResponse);
   }
 
-  addComment(id, text) {
+  addComment(id, text, username, password) {
     return fetch(`${this._url}/ads/${id}/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
       body: JSON.stringify(text),
     }).then(this._handleResponse);
   }
 
-  editComment(adId, commentId, data) {
+  editComment(adId, commentId, data, username, password) {
     return fetch(`${this._url}/ads/${adId}/comments/${commentId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
       body: JSON.stringify(data),
     }).then(this._handleResponse);
   }
 
-  deleteComment(adId, commentId) {
+  deleteComment(adId, commentId, username, password) {
     return fetch(`${this._url}/ads/${adId}/comments/${commentId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
     });
   }
@@ -102,18 +113,23 @@ class Api {
   getAds() {
     return fetch(`${this._url}/ads`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+      },
     }).then(this._handleResponse);
   }
 
-  getHiddenAds() {
+  getHiddenAds(username, password) {
     return fetch(`${this._url}/ads`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
+      },
     }).then(this._handleResponse);
   }
 
-  addAd({ image, title, price, description }) {
+  addAd({ image, title, price, description }, username, password) {
     const formData = new FormData();
     formData.append("image", image);
     formData.append("title", `${title}`);
@@ -124,50 +140,53 @@ class Api {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
     }).then(this._handleResponse);
   }
 
   //get Ad
-  getAd(id) {
+  getAd(id, username, password) {
     return fetch(`${this._url}/ads/${id}`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
+      },
     }).then(this._handleResponse);
   }
 
   //edit ad
-  editAdd(id, data) {
+  editAdd(id, data, username, password) {
     return fetch(`${this._url}/ads/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
       body: JSON.stringify(data),
     }).then(this._handleResponse);
   }
 
-  editAddPhoto(id, image) {
+  editAddPhoto(id, image, username, password) {
     const formData = new FormData();
     formData.append("image", image);
     return fetch(`${this._url}/ads/${id}`, formData, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
     }).then(this._handleResponse);
   }
 
   //delite add
-  deleteAdd(id) {
+  deleteAdd(id, username, password) {
     return fetch(`${this._url}/ads/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic user password",
+        Authorization: "Basic " + base64.encode(`${username}:${password}`),
       },
     });
   }
@@ -175,9 +194,6 @@ class Api {
 
 const api = new Api({
   url: "http://localhost:8080",
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 export default api;

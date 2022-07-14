@@ -7,6 +7,8 @@ import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
 function Comment(
   comment,
+  username,
+  password,
   { setComments, handleEditCommPopupOpen, isComPopupOpen, onClose, user }
 ) {
   const [adComment, setAdComment] = useState({});
@@ -14,7 +16,7 @@ function Comment(
 
   useEffect(() => {
     api
-      .getComment(comment.adId, comment.commentId)
+      .getComment(comment.adId, comment.commentId, username, password)
       .then((res) => {
         setAdComment(res.data);
       })
@@ -24,7 +26,7 @@ function Comment(
 
   const handleEditComment = (data) => {
     api
-      .editComment(comment.adId, comment.commentId, data)
+      .editComment(comment.adId, comment.commentId, data, username, password)
       .then((res) => {
         setAdComment(res.data);
       })
@@ -34,7 +36,7 @@ function Comment(
   const onDelete = (e) => {
     e.preventDefault();
     api
-      .deleteComment(comment.adId, comment.commentId)
+      .deleteComment(comment.adId, comment.commentId, username, password)
       .then(() => {
         setComments((comments) =>
           comments.filter((i) => i.id !== comment.commentId)
