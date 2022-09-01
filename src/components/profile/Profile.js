@@ -82,7 +82,7 @@ function Profile({ userInfo, handleUpdateUser }) {
           type="tel"
           name="phone"
           required
-          pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
+          pattern="\+7\s?[\(]{0,1}\d{3}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
           autoComplete="on"
           className="userForm__input"
           onChange={handleChangeInput}

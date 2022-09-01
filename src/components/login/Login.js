@@ -20,6 +20,9 @@ function Login({ handleAuthorization }) {
       //Передаём значения управляемых компонентов во внешний обработчик
       username: values.username,
       password: values.password,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      phone: values.phone
     });
   }
 

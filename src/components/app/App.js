@@ -20,6 +20,9 @@ function App() {
   const [userInfo, setUserInfo] = useState({});
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   //ads
   const [ad, setAd] = useState("");
   const [ads, setAds] = useState([]);
@@ -90,10 +93,10 @@ function App() {
 
   let filteredAds = isAuthorized ? searcAd(ads, ad) : searcAd(adsDefault, ad);
 
-  const handleRegistration = ({ username, password, role }) => {
+  const handleRegistration = ({ username, password, firstName, lastName, phone, role }) => {
     setIsLoading(true);
     auth
-      .registration({ username, password, role })
+      .registration({ username, password,  firstName, lastName, phone, role })
       .then((res) => {
         if (res) {
           navigate("/sign-in");
@@ -154,6 +157,9 @@ function App() {
         if (res.status === 200) {
           setUsername(data.username);
           setPassword(data.password);
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
+          setPhone(data.phone);
           localStorage.setItem("authTokens", JSON.stringify(data));
           setIsAuthorized(true);
           navigate("/");
@@ -315,6 +321,9 @@ function App() {
                   setAds={setAds}
                   username={username}
                   password={password}
+                  firstName={firstName}
+                  lastName={lastName}
+                  phone={phone}
                 />
               </ProtectedRoute>
             }

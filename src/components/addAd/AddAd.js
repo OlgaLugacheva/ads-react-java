@@ -69,7 +69,7 @@ function AddAd({ id, handleAddAd, isLoading }) {
         title={`${
           location === "/newAd" ? "Добавить новый товар" : "Изменить товар"
         }`}
-        buttonText={`${location === "/newAd" ? "Добавать" : "Изменить"}`}
+        buttonText={`${location === "/newAd" ? "Добавить" : "Изменить"}`}
         onSubmit={addNewAd}
         errors={
           title === null ||

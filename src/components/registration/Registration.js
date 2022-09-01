@@ -22,7 +22,8 @@ function Registration({ handleRegistration }) {
       password: values.password,
       // role: values.role,
       firstName: values.firstName,
-      phone: values.phone,
+      lastName: values.lastName,
+      phone: values.phone
     });
   }
 
@@ -137,7 +138,7 @@ function Registration({ handleRegistration }) {
             title="Телефон"
             type="tel"
             name="phone"
-            pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
+            pattern="\+7\s?[\(]{0,1}\d{3}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
             placeholder="+7(___)___-__-__"
             className="form__input"
             onChange={handleChangeInput}

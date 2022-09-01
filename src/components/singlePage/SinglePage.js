@@ -6,6 +6,7 @@ import Buttons from "../buttons/Buttons";
 import api from "../../utils/api";
 import Preloader from "../preloader/Preloader";
 import EditPhotoAdPopup from "../editPhotoAdPopup/EditPhotoAdPopup";
+import EditCommentPopup from "../editCommentPopup/EditCommentPopup";
 
 function SinglePage(props) {
   const { id } = useParams();
@@ -23,8 +24,8 @@ function SinglePage(props) {
         api.getAd(id, props.username, props.password),
       ])
         .then(([commentsData, adData]) => {
-          setComments(commentsData.data.results);
-          setAd(adData.data);
+          setComments(commentsData.results);
+          setAd(adData);
         })
         .catch((error) => console.log("error", error))
         .finally(() => setTimeout(() => props.setIsLoading(false), 700));
@@ -96,7 +97,7 @@ function SinglePage(props) {
                 </div>
               ) : (
                 <div
-                  style={{ backgroundImage: `url(${ad.image})` }}
+                  style={{ backgroundImage: `url(${"http://localhost:8080"+ad.image})` }}
                   className="cardInformation__img"
                 >
                   {props.user === ad.author_id ? (
@@ -137,6 +138,7 @@ function SinglePage(props) {
                 user={props.user}
                 username={props.username}
                 password={props.password}
+                adId={ad_pk}
               />
             </div>
             <EditAdPopup
